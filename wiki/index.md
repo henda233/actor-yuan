@@ -1,13 +1,13 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-08
+> 🔄 最后同步：2026-06-08 17:00
 
 ## 模块总览
 
 | 摘要名称 | 摘要路径 | 关键摘要内容 | 依赖健康度 | 最后更新 |
 |---|---|---|---|---|
 | `项目总览` | [🔗](./abstract/overview.md) | ActorYuan 项目全景：技术栈、目标、需求总览 | ✅ 无循环依赖 | 06-08 |
-| `需求1-数据存储` | [🔗](./abstract/req1.md) | 纯前端、localStorage + JSON 文件导入导出，含计费配置与模组存储 | ✅ 无循环依赖 | 06-08 |
+| `需求1-数据存储` | [🔗](./abstract/req1.md) | 纯前端、localStorage + JSON 文件导入导出，含计费配置与模组存储 | ✅ 已交付 | 06-08 |
 | `需求2-核心交互` | [🔗](./abstract/req2.md) | AI主持人交互流：情节草稿→规则计算介入→AI修正 | ⚠️ 依赖需求1 | 06-08 |
 | `需求3-API兼容` | [🔗](./abstract/req3.md) | OpenAI/Anthropic双格式、深度思考开关适配、token用量提取 | ⚠️ 依赖需求2 | 06-08 |
 | `需求4-UI设计` | [🔗](./abstract/req4.md) | 蓝白黑主色调、对话+右键插入双交互模式、计费展示、模组管理入口 | ⚠️ 依赖需求1、2、6、7 | 06-08 |
@@ -16,6 +16,12 @@
 | `需求7-模组导入` | [🔗](./abstract/req7.md) | 纯文本/Markdown模组导入、系统提示词注入、查看编辑 | ⚠️ 依赖需求1、3 | 06-08 |
 | `Vite项目初始化` | [🔗](./abstract/init-vite.md) | Vite 8 + React 19 + TS 6 + react-router 7 项目骨架已就绪 | ✅ 无循环依赖 | 06-08 |
 | `React Router Data模式笔记` | [🔗](./abstract/react-router-data-patterns.md) | Data模式、路由结构、fetcher API调用、pending UI、纯前端适配策略 | ✅ 无循环依赖 | 06-08 |
+
+## 计划总览
+
+| 计划名称 | 计划路径 | 关联需求 | 关键摘要 | 当前状态 | 最后更新 |
+|---|---|---|---|---|---|
+| `需求1-数据存储` | [🔗](./plan/req1.md) | [req1](./request/req1.md) | 5步骤：TS类型→localStorage→内存+JSON→退出警告→App集成 | ✅ completed | 06-08 |
 
 ## 实现优先级
 
@@ -35,7 +41,8 @@
 ## TODO列表
 
 - [x] 项目脚手架初始化（Vite + React + react-router）
-- [ ] 制定需求1（数据存储）的执行计划
+- [x] 制定需求1（数据存储）的执行计划 → `wiki/plan/req1.md`
+- [x] 执行需求1计划 S1-S5（`src/types/storage.ts`、`src/services/configStorage.ts`、`src/services/dataStore.tsx`、`src/hooks/useExitWarning.ts`、`src/App.tsx`、`src/main.tsx`）
 - [ ] 制定需求2（核心交互）的执行计划
 - [ ] 制定需求3（API兼容）的执行计划
 - [ ] 制定需求4（UI设计）的执行计划
@@ -63,6 +70,9 @@
 
 ## 全局更新日志
 
+- `06-08 17:30`: 需求1计划执行完成，S1-S5 全部交付，`npx tsc --noEmit` 通过
+- `06-08 17:00`: 新增「计划总览」表格，纳入 req1 执行计划；index.md 结构整理
+- `06-08`: 需求1对齐讨论完成，创建 `wiki/request/req1.md` 和 `wiki/plan/req1.md`（5步骤执行计划）
 - `06-08 16:30`: 阅读 `docs/react_routers/` 全部文档，编写 React Router Data 模式开发笔记，创建 `wiki/abstract/react-router-data-patterns.md`
 - `06-08 16:03`: Vite 8 + React 19.2.6 + TS 6.0 + react-router 7.17.0 项目脚手架初始化完成，创建 `wiki/abstract/init-vite.md`
 - `06-08`: WIKI 记忆库初始化，基于 `docs/项目文档 OUTDATE.md` 创建项目总览与 5 个需求摘要

@@ -2,10 +2,18 @@
 abstract_name: 需求1-纯前端与本地数据存储
 source_contents:
   - "docs/项目文档 OUTDATE.md"
+  - "wiki/request/req1.md"
+  - "wiki/plan/req1.md"
+  - "src/types/storage.ts"
+  - "src/services/configStorage.ts"
+  - "src/services/dataStore.tsx"
+  - "src/hooks/useExitWarning.ts"
+  - "src/App.tsx"
+  - "src/main.tsx"
 dependencies:
   - "wiki/abstract/overview.md"
 created_at: 2026-06-08
-updated_at: 2026-06-08
+updated_at: 2026-06-08 17:30
 ---
 # 摘要：需求1 —— 纯前端 + 本地 JSON 文件数据存储
 
