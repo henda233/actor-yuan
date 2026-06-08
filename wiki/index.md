@@ -1,6 +1,6 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-08 20:30
+> 🔄 最后同步：2026-06-08 23:00
 
 ## 模块总览
 
@@ -10,12 +10,19 @@
 | `需求1-数据存储` | [🔗](./abstract/req1.md) | 纯前端、localStorage + JSON 文件导入导出，含计费配置与模组存储 | ✅ 已交付 | 06-08 |
 | `需求2-核心交互` | [🔗](./abstract/req2.md) | AI主持人交互流：情节草稿→规则计算介入→AI修正 | ✅ 已交付 | 06-08 |
 | `需求3-API兼容` | [🔗](./abstract/req3.md) | OpenAI兼容格式/Anthropic双Provider、baseUrl可配、token用量提取、testConnection、4类错误、Mock保留 | ✅ 已交付 | 06-08 |
-| `需求4-UI设计` | [🔗](./abstract/req4.md) | 蓝白黑主色调、对话+右键插入双交互模式、计费展示、模组管理入口 | ⚠️ 依赖需求1、2、6、7 | 06-08 |
+| `需求4-UI设计` | [🔗](./abstract/req4.md) | 蓝白黑主色调、对话+右键插入双交互模式、WelcomeScreen、设置面板、占位组件 | ✅ 已交付 | 06-08 |
 | `需求5-输出模式` | [🔗](./abstract/req5.md) | 推演方案（隐藏）+ 情节正文双输出 | ⚠️ 依赖需求2、3 | 06-08 |
 | `需求6-API计费` | [🔗](./abstract/req6.md) | 按模型配置价格、token用量与费用展示、会话累计 | ⚠️ 依赖需求1、3 | 06-08 |
 | `需求7-模组导入` | [🔗](./abstract/req7.md) | 纯文本/Markdown模组导入、系统提示词注入、查看编辑 | ⚠️ 依赖需求1、3 | 06-08 |
 | `Vite项目初始化` | [🔗](./abstract/init-vite.md) | Vite 8 + React 19 + TS 6 + react-router 7 项目骨架已就绪 | ✅ | 06-08 |
 | `React Router Data模式笔记` | [🔗](./abstract/react-router-data-patterns.md) | Data模式、路由结构、fetcher API调用、pending UI、纯前端适配策略 | ✅ | 06-08 |
+| `code-types` | [🔗](./abstract/code/code-types.md) | 全部共享类型定义：Message、ChatResult、ProviderType 等 | ✅ | 06-08 |
+| `code-config-storage` | [🔗](./abstract/code/code-config-storage.md) | localStorage 配置层：6 组 getter/setter、键名规范 | ✅ | 06-08 |
+| `code-data-store` | [🔗](./abstract/code/code-data-store.md) | React Context 数据层：import/export、消息 CRUD、dirty 追踪 | ✅ | 06-08 |
+| `code-ai-service` | [🔗](./abstract/code/code-ai-service.md) | AIService 接口、工厂函数、4 类错误体系 | ✅ | 06-08 |
+| `code-providers` | [🔗](./abstract/code/code-providers.md) | OpenAI 兼容 / Anthropic / Mock 三种 Provider 实现 | ✅ | 06-08 |
+| `code-hooks` | [🔗](./abstract/code/code-hooks.md) | useConversation（含 discardDraft/regenerateDraft）、useExitWarning、Req2Test 面板 | ✅ | 06-08 |
+| `code-ui-components` | [🔗](./abstract/code/code-ui-components.md) | 13 个 UI 组件：TopBar/MessageList/MessageBubble/ChatInput/ConfirmDraftBar/DraftContextMenu/InsertDialog/RightPanel/SettingsPanel/ModulePanel/BillingCorner/WelcomeScreen | ✅ | 06-08 |
 
 ## 计划状态
 
@@ -24,11 +31,10 @@
 | `需求1-数据存储` | [plan/req1.md](./plan/req1.md) | 5 | completed |
 | `需求2-核心交互` | [plan/req2.md](./plan/req2.md) | 6 | completed |
 | `需求3-API兼容` | [plan/req3.md](./plan/req3.md) | 9 | completed |
+| `需求4-UI设计` | [plan/req4.md](./plan/req4.md) | 11 | completed |
 
 ## TODO列表
 
-- [ ] 解决需求3的出现的问题
-- [ ] 制定需求4（UI设计）的执行计划
 - [ ] 制定需求6（API计费）的执行计划
 - [ ] 制定需求7（模组导入）的执行计划
 - [ ] 制定需求5（输出模式）的执行计划 —— 延后
@@ -59,6 +65,8 @@
 
 ## 全局更新日志
 
+- `06-08 23:00`: 需求4 全部交付（S0-S10）：13 个 UI 组件、dataStore 增加 deleteMessage、useConversation 增加 discardDraft/regenerateDraft、WelcomeScreen、白蓝黑主题、段落级插入
+- `06-08 21:00`: 创建 6 个代码模块摘要（code-types/config-storage/data-store/ai-service/providers/hooks）；修复 req2/req3 的 source_contents 缺漏
 - `06-08 20:30`: 需求3 WIKI 记忆库全面更新（计划、摘要、index），补充错误分类、baseUrl 决策、完整测试方案
 - `06-08 20:15`: S9 补充 OpenAILikeProvider 可配置 baseUrl（默认 `https://api.openai.com/v1`）
 - `06-08 20:00`: 需求3计划执行完成，S1-S8 全部交付，`npx tsc --noEmit` 通过

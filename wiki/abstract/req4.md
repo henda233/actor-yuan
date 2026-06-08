@@ -2,12 +2,38 @@
 abstract_name: 需求4-UI设计与交互模式
 source_contents:
   - "docs/项目文档 OUTDATE.md"
+  - "wiki/plan/req4.md"
+  - "src/App.tsx"
+  - "src/App.css"
+  - "src/index.css"
+  - "src/services/dataStore.tsx"
+  - "src/hooks/useConversation.ts"
+  - "src/components/TopBar.tsx"
+  - "src/components/MessageList.tsx"
+  - "src/components/MessageBubble.tsx"
+  - "src/components/ChatInput.tsx"
+  - "src/components/ConfirmDraftBar.tsx"
+  - "src/components/DraftContextMenu.tsx"
+  - "src/components/InsertDialog.tsx"
+  - "src/components/RightPanel.tsx"
+  - "src/components/SettingsPanel.tsx"
+  - "src/components/ModulePanel.tsx"
+  - "src/components/BillingCorner.tsx"
+  - "src/components/WelcomeScreen.tsx"
 dependencies:
   - "wiki/abstract/overview.md"
   - "wiki/abstract/req1.md"
   - "wiki/abstract/req2.md"
+  - "wiki/abstract/req6.md"
+  - "wiki/abstract/req7.md"
+  - "wiki/abstract/code/code-types.md"
+  - "wiki/abstract/code/code-config-storage.md"
+  - "wiki/abstract/code/code-data-store.md"
+  - "wiki/abstract/code/code-ai-service.md"
+  - "wiki/abstract/code/code-hooks.md"
+  - "wiki/abstract/code/code-ui-components.md"
 created_at: 2026-06-08
-updated_at: 2026-06-08
+updated_at: 2026-06-08 23:00
 ---
 # 摘要：需求4 —— UI 设计与交互模式
 

@@ -1,0 +1,21 @@
+.confirm-draft-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid var(--draft);
+  background: var(--draft-bg);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.confirm-draft-hint {
+  font-size: 13px;
+  color: var(--draft);
+  font-weight: 500;
+}
+
+.confirm-draft-actions {
+  display: flex;
+  gap: 8px;
+}

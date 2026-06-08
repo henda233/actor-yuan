@@ -14,7 +14,7 @@ import {
 import type { Message } from '../types/storage';
 
 export function useConversation(aiService?: AIService) {
-  const { data, addMessage, updateMessage } = useDataStore();
+  const { data, addMessage, updateMessage, deleteMessage } = useDataStore();
   const service = aiService ?? createMockProvider();
 
   const [phase, setPhase] = useState<'chatting' | 'reviewing_draft'>(() =>
@@ -88,6 +88,51 @@ export function useConversation(aiService?: AIService) {
     [phase, draftMessage, updateMessage],
   );
 
+  const discardDraft = useCallback(() => {
+    if (phase !== 'reviewing_draft' || !draftMessage) {
+      throw new Error('当前没有待确认的草稿');
+    }
+    deleteMessage(draftMessage.id);
+    setPhase('chatting');
+  }, [phase, draftMessage, deleteMessage]);
+
+  const regenerateDraft = useCallback(async () => {
+    if (phase !== 'reviewing_draft' || !draftMessage) {
+      throw new Error('当前没有待确认的草稿');
+    }
+    setError(null);
+    setLoading(true);
+
+    const validMessages = data.messages.filter(
+      (m) => m.role !== 'system' && m.status !== 'draft',
+    );
+
+    deleteMessage(draftMessage.id);
+
+    try {
+      const { content: aiContent, usage } = await service.chat(
+        validMessages,
+        getSystemPrompt(),
+      );
+      console.debug('[useConversation] token usage:', usage);
+      addMessage('assistant', aiContent, 'draft');
+    } catch (e) {
+      if (e instanceof AIAuthError) {
+        setError('API Key 无效，请检查配置');
+      } else if (e instanceof AIRateLimitError) {
+        setError('API 调用频率超限，请稍后重试');
+      } else if (e instanceof AINetworkError) {
+        setError('网络连接失败，请检查网络状态');
+      } else if (e instanceof AIAPIError) {
+        setError(`API 服务异常 (${e.statusCode}): ${e.message}`);
+      } else {
+        setError(e instanceof Error ? e.message : 'AI 服务调用失败');
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [phase, draftMessage, data.messages, deleteMessage, addMessage, service]);
+
   const confirmDraft = useCallback(() => {
     if (phase !== 'reviewing_draft' || !draftMessage) {
       throw new Error('当前没有待确认的草稿');
@@ -104,6 +149,8 @@ export function useConversation(aiService?: AIService) {
     draftMessage,
     sendMessage,
     insertIntoDraft,
+    discardDraft,
+    regenerateDraft,
     confirmDraft,
   };
 }

@@ -9,11 +9,13 @@ source_contents:
   - "src/services/aiService.ts"
   - "src/services/dataStore.tsx"
   - "src/hooks/useConversation.ts"
+  - "src/test/Req2Test.tsx"
+  - "wiki/abstract/code/code-hooks.md"
 dependencies:
   - "wiki/abstract/overview.md"
   - "wiki/abstract/req1.md"
 created_at: 2026-06-08
-updated_at: 2026-06-08 19:00
+updated_at: 2026-06-08 21:00
 ---
 # 摘要：需求2 —— AI 主持人核心交互流程
 

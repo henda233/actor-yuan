@@ -1,0 +1,37 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 52px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.topbar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.topbar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: background 0.15s;
+}
+
+.topbar-toggle:hover {
+  background: var(--gray-bg);
+}
+
+.topbar-toggle-icon {
+  font-size: 16px;
+}

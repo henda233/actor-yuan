@@ -14,6 +14,13 @@ wiki/
 ├── index.md           # 全局摘要索引（所有任务开始时必读）
 ├── abstract/          # 摘要目录
 │   ├── overview.md    # 项目总览摘要
+│   ├── code/          # 代码模块摘要
+│   │   ├── code-types.md
+│   │   ├── code-config-storage.md
+│   │   ├── code-data-store.md
+│   │   ├── code-ai-service.md
+│   │   ├── code-providers.md
+│   │   └── code-hooks.md
 │   ├── req1.md        # 需求1：纯前端 + 本地 JSON 数据存储
 │   ├── req2.md        # 需求2：AI 主持人核心交互流程
 │   ├── req3.md        # 需求3：大模型 API 兼容（OpenAI / Anthropic）

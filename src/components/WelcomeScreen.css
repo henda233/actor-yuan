@@ -1,0 +1,38 @@
+.welcome-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-card {
+  text-align: center;
+  max-width: 420px;
+  padding: 40px;
+}
+
+.welcome-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.welcome-subtitle {
+  font-size: 16px;
+  color: var(--blue);
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.welcome-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.welcome-btn {
+  padding: 10px 32px;
+  font-size: 15px;
+}

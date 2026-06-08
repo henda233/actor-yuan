@@ -9,6 +9,7 @@ interface DataStoreContextValue {
   importData: (file: File) => Promise<void>;
   addMessage: (role: Message['role'], content: string, status?: Message['status']) => void;
   updateMessage: (id: string, patch: Partial<Pick<Message, 'content' | 'status'>>) => void;
+  deleteMessage: (id: string) => void;
   setModule: (text: string) => void;
 }
 
@@ -79,6 +80,14 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
     setDirty(true);
   }, []);
 
+  const deleteMessage = useCallback((id: string) => {
+    setData((prev) => ({
+      ...prev,
+      messages: prev.messages.filter((m) => m.id !== id),
+    }));
+    setDirty(true);
+  }, []);
+
   const setModule = useCallback((text: string) => {
     setData((prev) => ({ ...prev, module: text }));
     setDirty(true);
@@ -86,7 +95,7 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
 
   return (
     <DataStoreContext.Provider
-      value={{ data, dirty, exportData, importData, addMessage, updateMessage, setModule }}
+      value={{ data, dirty, exportData, importData, addMessage, updateMessage, deleteMessage, setModule }}
     >
       {children}
     </DataStoreContext.Provider>

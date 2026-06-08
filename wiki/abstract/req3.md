@@ -2,12 +2,25 @@
 abstract_name: 需求3-大模型API兼容
 source_contents:
   - "docs/项目文档 OUTDATE.md"
+  - "wiki/request/req3.md"
   - "wiki/plan/req3.md"
+  - "src/types/storage.ts"
+  - "src/services/configStorage.ts"
+  - "src/services/aiService.ts"
+  - "src/services/providers/openaiProvider.ts"
+  - "src/services/providers/anthropicProvider.ts"
+  - "src/services/providers/mockProvider.ts"
+  - "src/hooks/useConversation.ts"
+  - "wiki/abstract/code/code-types.md"
+  - "wiki/abstract/code/code-config-storage.md"
+  - "wiki/abstract/code/code-ai-service.md"
+  - "wiki/abstract/code/code-providers.md"
+  - "wiki/abstract/code/code-hooks.md"
 dependencies:
   - "wiki/abstract/overview.md"
   - "wiki/abstract/req2.md"
 created_at: 2026-06-08
-updated_at: 2026-06-08 20:30
+updated_at: 2026-06-08 21:00
 ---
 # 摘要：需求3 —— 大模型 API 兼容（OpenAI 兼容格式 / Anthropic）
 

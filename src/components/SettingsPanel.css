@@ -1,0 +1,87 @@
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setting-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.setting-input,
+.setting-select,
+.setting-textarea {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+}
+
+.setting-input:focus,
+.setting-select:focus,
+.setting-textarea:focus {
+  border-color: var(--blue);
+}
+
+.setting-textarea {
+  resize: vertical;
+  line-height: 1.6;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.setting-test-btn {
+  align-self: flex-start;
+}
+
+.setting-test-msg {
+  font-size: 13px;
+}
+
+.setting-test-ok {
+  color: #16a34a;
+}
+
+.setting-test-err {
+  color: var(--error);
+}
+
+.setting-divider {
+  border-top: 1px solid var(--border);
+}
+
+.setting-billing-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.setting-billing-input {
+  width: 80px;
+}
+
+.setting-billing-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.setting-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.setting-io-row {
+  display: flex;
+  gap: 8px;
+}
