@@ -1,52 +1,33 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-08 19:00
+> 🔄 最后同步：2026-06-08 20:30
 
 ## 模块总览
 
 | 摘要名称 | 摘要路径 | 关键摘要内容 | 依赖健康度 | 最后更新 |
 |---|---|---|---|---|
-| `项目总览` | [🔗](./abstract/overview.md) | ActorYuan 项目全景：技术栈、目标、需求总览 | ✅ 无循环依赖 | 06-08 |
+| `项目总览` | [🔗](./abstract/overview.md) | ActorYuan 项目全景：技术栈、目标、需求总览 | ✅ | 06-08 |
 | `需求1-数据存储` | [🔗](./abstract/req1.md) | 纯前端、localStorage + JSON 文件导入导出，含计费配置与模组存储 | ✅ 已交付 | 06-08 |
 | `需求2-核心交互` | [🔗](./abstract/req2.md) | AI主持人交互流：情节草稿→规则计算介入→AI修正 | ✅ 已交付 | 06-08 |
-| `需求3-API兼容` | [🔗](./abstract/req3.md) | OpenAI/Anthropic双格式、深度思考开关适配、token用量提取 | ⚠️ 依赖需求2 | 06-08 |
+| `需求3-API兼容` | [🔗](./abstract/req3.md) | OpenAI兼容格式/Anthropic双Provider、baseUrl可配、token用量提取、testConnection、4类错误、Mock保留 | ✅ 已交付 | 06-08 |
 | `需求4-UI设计` | [🔗](./abstract/req4.md) | 蓝白黑主色调、对话+右键插入双交互模式、计费展示、模组管理入口 | ⚠️ 依赖需求1、2、6、7 | 06-08 |
 | `需求5-输出模式` | [🔗](./abstract/req5.md) | 推演方案（隐藏）+ 情节正文双输出 | ⚠️ 依赖需求2、3 | 06-08 |
 | `需求6-API计费` | [🔗](./abstract/req6.md) | 按模型配置价格、token用量与费用展示、会话累计 | ⚠️ 依赖需求1、3 | 06-08 |
 | `需求7-模组导入` | [🔗](./abstract/req7.md) | 纯文本/Markdown模组导入、系统提示词注入、查看编辑 | ⚠️ 依赖需求1、3 | 06-08 |
-| `Vite项目初始化` | [🔗](./abstract/init-vite.md) | Vite 8 + React 19 + TS 6 + react-router 7 项目骨架已就绪 | ✅ 无循环依赖 | 06-08 |
-| `React Router Data模式笔记` | [🔗](./abstract/react-router-data-patterns.md) | Data模式、路由结构、fetcher API调用、pending UI、纯前端适配策略 | ✅ 无循环依赖 | 06-08 |
+| `Vite项目初始化` | [🔗](./abstract/init-vite.md) | Vite 8 + React 19 + TS 6 + react-router 7 项目骨架已就绪 | ✅ | 06-08 |
+| `React Router Data模式笔记` | [🔗](./abstract/react-router-data-patterns.md) | Data模式、路由结构、fetcher API调用、pending UI、纯前端适配策略 | ✅ | 06-08 |
 
-## 计划总览
+## 计划状态
 
-| 计划名称 | 计划路径 | 关联需求 | 关键摘要 | 当前状态 | 最后更新 |
-|---|---|---|---|---|---|
-| `需求1-数据存储` | [🔗](./plan/req1.md) | [req1](./request/req1.md) | 5步骤：TS类型→localStorage→内存+JSON→退出警告→App集成 | ✅ completed | 06-08 |
-| `需求2-核心交互` | [🔗](./plan/req2.md) | [req2](./request/req2.md) | 6步骤：Message扩展→提示词存储→AI接口+mock→DataStore扩展→useConversation→类型检查 | ✅ completed | 06-08 |
-
-## 实现优先级
-
-**MVP（第一版交付）：**
-
-1. **需求1** —— 项目基础设施，数据存储方案
-2. **需求2** —— 核心业务逻辑，AI主持人交互流
-3. **需求3** —— API 兼容层（MVP 可先支持单一 API 格式）
-4. **需求4** —— UI 框架（MVP 精简版：直接对话 + 右键插入 + 计费展示 + 模组入口）
-5. **需求6** —— API 计费（依赖需求3的token提取 + 需求4的展示）
-6. **需求7** —— 模组导入（依赖需求1的存储 + 需求3的提示词注入）
-
-**延后：**
-
-7. **需求5** —— 双输出模式（可通过提示词工程模拟，正式实现延后）
+| 计划名称 | 路径 | 步骤数 | 状态 |
+|---|---|---|---|
+| `需求1-数据存储` | [plan/req1.md](./plan/req1.md) | 5 | completed |
+| `需求2-核心交互` | [plan/req2.md](./plan/req2.md) | 6 | completed |
+| `需求3-API兼容` | [plan/req3.md](./plan/req3.md) | 9 | completed |
 
 ## TODO列表
 
-- [x] 项目脚手架初始化（Vite + React + react-router）
-- [x] 制定需求1（数据存储）的执行计划 → `wiki/plan/req1.md`
-- [x] 执行需求1计划 S1-S5（`src/types/storage.ts`、`src/services/configStorage.ts`、`src/services/dataStore.tsx`、`src/hooks/useExitWarning.ts`、`src/App.tsx`、`src/main.tsx`）
-- [x] 制定需求2（核心交互）的执行计划
-- [x] 执行需求2计划 S1-S6（`src/types/storage.ts`、`src/services/configStorage.ts`、`src/services/aiService.ts`、`src/services/dataStore.tsx`、`src/hooks/useConversation.ts`）
-- [ ] 制定需求3（API兼容）的执行计划
+- [ ] 解决需求3的出现的问题
 - [ ] 制定需求4（UI设计）的执行计划
 - [ ] 制定需求6（API计费）的执行计划
 - [ ] 制定需求7（模组导入）的执行计划
@@ -70,15 +51,24 @@
 - 数据持久化依赖用户手动导入导出 JSON 文件（含模组文本）
 - 不支持流式响应（当前版本）
 
+### 需求3 关键澄清
+
+- **OpenAI 格式**指兼容 Chat Completions 协议的任意服务，通过 `apiBaseUrl` 配置路由，非仅 OpenAI 官方
+- Anthropic URL 固定不变（其协议为独有格式）
+- 错误分 4 类，`useConversation` 中按类型给出中文提示
+
 ## 全局更新日志
 
+- `06-08 20:30`: 需求3 WIKI 记忆库全面更新（计划、摘要、index），补充错误分类、baseUrl 决策、完整测试方案
+- `06-08 20:15`: S9 补充 OpenAILikeProvider 可配置 baseUrl（默认 `https://api.openai.com/v1`）
+- `06-08 20:00`: 需求3计划执行完成，S1-S8 全部交付，`npx tsc --noEmit` 通过
+- `06-08 19:30`: 需求3执行计划制定完成（8步骤），与用户对齐全部关键决策
 - `06-08 19:00`: 需求2计划执行完成，S1-S6 全部交付，`npx tsc --noEmit` 通过
-- `06-08 18:00`: 需求2计划制定完成（6步骤），确定方案B架构；创建 `wiki/request/req2.md`、`wiki/plan/req2.md`
+- `06-08 18:00`: 需求2计划制定完成（6步骤），确定方案B架构
 - `06-08 17:30`: 需求1计划执行完成，S1-S5 全部交付，`npx tsc --noEmit` 通过
 - `06-08 17:00`: 新增「计划总览」表格，纳入 req1 执行计划；index.md 结构整理
-- `06-08`: 需求1对齐讨论完成，创建 `wiki/request/req1.md` 和 `wiki/plan/req1.md`（5步骤执行计划）
-- `06-08 16:30`: 阅读 `docs/react_routers/` 全部文档，编写 React Router Data 模式开发笔记，创建 `wiki/abstract/react-router-data-patterns.md`
-- `06-08 16:03`: Vite 8 + React 19.2.6 + TS 6.0 + react-router 7.17.0 项目脚手架初始化完成，创建 `wiki/abstract/init-vite.md`
+- `06-08 16:30`: 阅读 React Router 文档，编写 Data 模式开发笔记
+- `06-08 16:03`: Vite 8 + React 19.2.6 + TS 6.0 + react-router 7.17.0 项目脚手架初始化完成
+- `06-08 14:30`: 需求2泛化 —— "判定规则"→"游戏规则计算"，涵盖判定/伤害/状态/资源等
+- `06-08`: 需求对齐讨论 —— 新增 req6（API计费）、req7（模组导入）；确认 MVP 范围与优先级
 - `06-08`: WIKI 记忆库初始化，基于 `docs/项目文档 OUTDATE.md` 创建项目总览与 5 个需求摘要
-- `06-08 14:30`: 需求2泛化 —— "判定规则"→"游戏规则计算"，涵盖判定/伤害/状态/资源等，统一术语
-- `06-08`: 需求对齐讨论 —— 新增 req6（API计费）、req7（模组导入）；更新 req1（扩展数据范围）、req3（增加token提取）、req4（增加计费展示与模组管理入口）；确认流式响应暂不需要；确定 MVP 范围与优先级

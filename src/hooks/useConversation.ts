@@ -2,12 +2,20 @@ import { useState, useCallback, useMemo } from 'react';
 import { useDataStore } from '../services/dataStore';
 import { getSystemPrompt } from '../services/configStorage';
 import type { AIService } from '../services/aiService';
-import { createMockAIService } from '../services/aiService';
+import {
+  createMockProvider,
+} from '../services/providers/mockProvider';
+import {
+  AIAuthError,
+  AIRateLimitError,
+  AINetworkError,
+  AIAPIError,
+} from '../services/aiService';
 import type { Message } from '../types/storage';
 
 export function useConversation(aiService?: AIService) {
   const { data, addMessage, updateMessage } = useDataStore();
-  const service = aiService ?? createMockAIService();
+  const service = aiService ?? createMockProvider();
 
   const [phase, setPhase] = useState<'chatting' | 'reviewing_draft'>(() =>
     data.messages.some((m) => m.status === 'draft') ? 'reviewing_draft' : 'chatting',
@@ -42,11 +50,25 @@ export function useConversation(aiService?: AIService) {
       const messagesForAI = [...validMessages, userMsg];
 
       try {
-        const response = await service.chat(messagesForAI, getSystemPrompt());
-        addMessage('assistant', response, 'draft');
+        const { content: aiContent, usage } = await service.chat(
+          messagesForAI,
+          getSystemPrompt(),
+        );
+        console.debug('[useConversation] token usage:', usage);
+        addMessage('assistant', aiContent, 'draft');
         setPhase('reviewing_draft');
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'AI 服务调用失败');
+        if (e instanceof AIAuthError) {
+          setError('API Key 无效，请检查配置');
+        } else if (e instanceof AIRateLimitError) {
+          setError('API 调用频率超限，请稍后重试');
+        } else if (e instanceof AINetworkError) {
+          setError('网络连接失败，请检查网络状态');
+        } else if (e instanceof AIAPIError) {
+          setError(`API 服务异常 (${e.statusCode}): ${e.message}`);
+        } else {
+          setError(e instanceof Error ? e.message : 'AI 服务调用失败');
+        }
       } finally {
         setLoading(false);
       }

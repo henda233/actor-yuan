@@ -24,3 +24,13 @@ export interface AppData {
   module: string;
   messages: Message[];
 }
+
+export type ProviderType = 'openai' | 'anthropic' | 'mock';
+
+export interface ChatResult {
+  content: string;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+  };
+}

@@ -1,14 +1,71 @@
-import type { Message } from '../types/storage';
+import type { Message, ChatResult, ProviderType } from '../types/storage';
+import { createOpenAIProvider } from './providers/openaiProvider';
+import { createAnthropicProvider } from './providers/anthropicProvider';
+import { createMockProvider } from './providers/mockProvider';
 
 export interface AIService {
-  chat(messages: Message[], systemPrompt: string): Promise<string>;
+  chat(messages: Message[], systemPrompt: string): Promise<ChatResult>;
+  testConnection(): Promise<void>;
 }
 
-export function createMockAIService(): AIService {
-  return {
-    async chat(_messages: Message[], _systemPrompt: string): Promise<string> {
-      await new Promise((r) => setTimeout(r, 500));
-      return '[MOCK] 你推开厚重的石门，一股腐朽的气息扑面而来。借着微弱的火光，你看到前方是一个宽阔的大厅，地面上散落着碎裂的骨骼。大厅的尽头，一双猩红的眼睛正注视着你。';
-    },
-  };
+export interface AIServiceConfig {
+  provider: ProviderType;
+  apiKey: string;
+  apiBaseUrl?: string;
+  model: string;
+}
+
+export class AINetworkError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AINetworkError';
+  }
+}
+
+export class AIAuthError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AIAuthError';
+  }
+}
+
+export class AIRateLimitError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AIRateLimitError';
+  }
+}
+
+export class AIAPIError extends Error {
+  statusCode: number;
+  constructor(statusCode: number, message: string) {
+    super(message);
+    this.name = 'AIAPIError';
+    this.statusCode = statusCode;
+  }
+}
+
+export async function handleAPIError(response: Response): Promise<never> {
+  const status = response.status;
+  let message: string;
+  try {
+    const body = await response.json();
+    message = body.error?.message ?? JSON.stringify(body);
+  } catch {
+    message = `${status} ${response.statusText}`;
+  }
+  if (status === 401 || status === 403) throw new AIAuthError(message);
+  if (status === 429) throw new AIRateLimitError(message);
+  throw new AIAPIError(status, message);
+}
+
+export function createAIService(config: AIServiceConfig): AIService {
+  switch (config.provider) {
+    case 'openai':
+      return createOpenAIProvider(config.apiKey, config.apiBaseUrl ?? 'https://api.openai.com/v1', config.model);
+    case 'anthropic':
+      return createAnthropicProvider(config.apiKey, config.model);
+    case 'mock':
+      return createMockProvider();
+  }
 }
