@@ -7,7 +7,8 @@ interface DataStoreContextValue {
   dirty: boolean;
   exportData: () => void;
   importData: (file: File) => Promise<void>;
-  addMessage: (role: Message['role'], content: string) => void;
+  addMessage: (role: Message['role'], content: string, status?: Message['status']) => void;
+  updateMessage: (id: string, patch: Partial<Pick<Message, 'content' | 'status'>>) => void;
   setModule: (text: string) => void;
 }
 
@@ -53,16 +54,27 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
     setDirty(false);
   }, []);
 
-  const addMessage = useCallback((role: Message['role'], content: string) => {
+  const addMessage = useCallback((role: Message['role'], content: string, status?: Message['status']) => {
     const msg: Message = {
       id: crypto.randomUUID(),
       role,
       content,
       timestamp: Date.now(),
+      status,
     };
     setData((prev) => ({
       ...prev,
       messages: [...prev.messages, msg],
+    }));
+    setDirty(true);
+  }, []);
+
+  const updateMessage = useCallback((id: string, patch: Partial<Pick<Message, 'content' | 'status'>>) => {
+    setData((prev) => ({
+      ...prev,
+      messages: prev.messages.map((m) =>
+        m.id === id ? { ...m, ...patch } : m,
+      ),
     }));
     setDirty(true);
   }, []);
@@ -74,7 +86,7 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
 
   return (
     <DataStoreContext.Provider
-      value={{ data, dirty, exportData, importData, addMessage, setModule }}
+      value={{ data, dirty, exportData, importData, addMessage, updateMessage, setModule }}
     >
       {children}
     </DataStoreContext.Provider>

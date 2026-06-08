@@ -1,12 +1,19 @@
 ---
 abstract_name: 需求2-AI主持人核心交互流程
 source_contents:
-  - "docs/项目文档.md"
+  - "docs/项目文档 OUTDATE.md"
+  - "wiki/request/req2.md"
+  - "wiki/plan/req2.md"
+  - "src/types/storage.ts"
+  - "src/services/configStorage.ts"
+  - "src/services/aiService.ts"
+  - "src/services/dataStore.tsx"
+  - "src/hooks/useConversation.ts"
 dependencies:
   - "wiki/abstract/overview.md"
   - "wiki/abstract/req1.md"
 created_at: 2026-06-08
-updated_at: 2026-06-08 14:30
+updated_at: 2026-06-08 19:00
 ---
 # 摘要：需求2 —— AI 主持人核心交互流程
 

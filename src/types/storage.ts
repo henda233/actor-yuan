@@ -3,6 +3,7 @@ export interface Message {
   role: 'system' | 'user' | 'assistant';
   content: string;
   timestamp: number;
+  status?: 'draft' | 'confirmed';
 }
 
 export interface BillingPrice {

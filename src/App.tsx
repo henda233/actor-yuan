@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useDataStore } from './services/dataStore';
 import { useExitWarning } from './hooks/useExitWarning';
+import Req2Test from './test/Req2Test';
 
 function App() {
   const { dirty, exportData, importData } = useDataStore();
@@ -24,6 +25,7 @@ function App() {
   return (
     <div style={{ maxWidth: 640, margin: '40px auto', padding: '0 16px' }}>
       <h1>ActorYuan - AI 跑团主持人</h1>
+      <Req2Test />
       <p style={{ color: '#666' }}>纯前端 AI TRPG 主持人交互应用</p>
       <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
         <button type="button" onClick={exportData}>

@@ -4,6 +4,7 @@ const KEYS = {
   apiKey: 'actor-yuan:api-key',
   model: 'actor-yuan:model',
   billingPrices: 'actor-yuan:billing-prices',
+  systemPrompt: 'actor-yuan:system-prompt',
 } as const;
 
 export function getApiKey(): string | null {
@@ -34,4 +35,12 @@ export function getBillingPrices(): BillingPrices {
 
 export function setBillingPrices(value: BillingPrices): void {
   localStorage.setItem(KEYS.billingPrices, JSON.stringify(value));
+}
+
+export function getSystemPrompt(): string {
+  return localStorage.getItem(KEYS.systemPrompt) ?? '';
+}
+
+export function setSystemPrompt(value: string): void {
+  localStorage.setItem(KEYS.systemPrompt, value);
 }
