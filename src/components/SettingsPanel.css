@@ -85,3 +85,23 @@
   display: flex;
   gap: 8px;
 }
+
+.setting-error {
+  font-size: 12px;
+  color: var(--error);
+}
+
+.setting-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.setting-checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}

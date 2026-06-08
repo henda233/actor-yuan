@@ -35,3 +35,19 @@
 .topbar-toggle-icon {
   font-size: 16px;
 }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-debug-btn {
+  font-size: 13px;
+}
+
+.topbar-debug-active {
+  background: var(--blue-light);
+  border-color: var(--blue);
+  color: var(--blue);
+}

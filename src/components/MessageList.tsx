@@ -4,11 +4,10 @@ import MessageBubble from './MessageBubble';
 
 interface MessageListProps {
   messages: Message[];
-  draftInserted?: boolean;
-  onDraftContextMenu?: (e: React.MouseEvent, messageId: string, paragraphIndex: number) => void;
+  onDraftContentChange?: (content: string) => void;
 }
 
-export default function MessageList({ messages, draftInserted, onDraftContextMenu }: MessageListProps) {
+export default function MessageList({ messages, onDraftContentChange }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,11 +25,8 @@ export default function MessageList({ messages, draftInserted, onDraftContextMen
           <MessageBubble
             key={m.id}
             message={m}
-            draftInserted={m.status === 'draft' ? draftInserted : undefined}
-            onParagraphContextMenu={
-              m.status === 'draft'
-                ? (e, pi) => onDraftContextMenu?.(e, m.id, pi)
-                : undefined
+            onDraftContentChange={
+              m.status === 'draft' ? onDraftContentChange : undefined
             }
           />
         ))}

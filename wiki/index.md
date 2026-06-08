@@ -1,6 +1,6 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-08 23:30
+> 🔄 最后同步：2026-06-08 23:59
 
 ## 模块总览
 
@@ -11,7 +11,7 @@
 | `需求2-核心交互` | [🔗](./abstract/req2.md) | AI主持人交互流：情节草稿→规则计算介入→AI修正 | ✅ 已交付 | 06-08 |
 | `需求3-API兼容` | [🔗](./abstract/req3.md) | OpenAI兼容格式/Anthropic双Provider、baseUrl可配、token用量提取、testConnection、4类错误、Mock保留 | ✅ 已交付 | 06-08 |
 | `需求4-UI设计` | [🔗](./abstract/req4.md) | 蓝白黑主色调、对话+右键插入双交互模式、WelcomeScreen、设置面板、占位组件 | ✅ 已交付 | 06-08 |
-| `需求5-输出模式` | [🔗](./abstract/req5.md) | 推演方案（隐藏）+ 情节正文双输出 | ⚠️ 依赖需求2、3 | 06-08 |
+| `需求5-输出模式` | [🔗](./abstract/req5.md) | 推演方案（隐藏）+ 情节正文双输出、textarea 自由编辑草稿、双 API 调用、分阶段 loading、retryNarrative | ✅ 已交付 | 06-08 |
 | `需求6-API计费` | [🔗](./abstract/req6.md) | 按模型配置价格、token用量与费用展示、会话累计 | ⚠️ 依赖需求1、3 | 06-08 |
 | `需求7-模组导入` | [🔗](./abstract/req7.md) | 纯文本/Markdown模组导入、系统提示词注入、查看编辑 | ⚠️ 依赖需求1、3 | 06-08 |
 | `Vite项目初始化` | [🔗](./abstract/init-vite.md) | Vite 8 + React 19 + TS 6 + react-router 7 项目骨架已就绪 | ✅ | 06-08 |
@@ -32,12 +32,12 @@
 | `需求2-核心交互` | [plan/req2.md](./plan/req2.md) | 6 | completed |
 | `需求3-API兼容` | [plan/req3.md](./plan/req3.md) | 9 | completed |
 | `需求4-UI设计` | [plan/req4.md](./plan/req4.md) | 11 | completed |
+| `需求5-输出模式` | [plan/req5.md](./plan/req5.md) | 11 | completed |
 
 ## TODO列表
 
 - [ ] 制定需求6（API计费）的执行计划
 - [ ] 制定需求7（模组导入）的执行计划
-- [ ] 制定需求5（输出模式）的执行计划
 
 ## 笔记
 
@@ -65,6 +65,9 @@
 
 ## 全局更新日志
 
+- `06-08 23:59`: Debug 面板功能：configStorage 新增 getDebugMode/setDebugMode、useConversation 新增 DebugEntry/DebugEntries 类型 + debugEntries 捕获、DebugPanel 组件（右侧遮罩面板，双阶段输入对比）、SettingsPanel debug 开关、TopBar debug 按钮、`npx tsc --noEmit` 零错误
+- `06-08`: 需求5 全部交付（S1-S11）：双 API 调用双输出、LoadingStage 分阶段、reasoning 折叠、textarea 编辑草稿、retryNarrative/cancelPendingReasoning、删除 DraftContextMenu/InsertDialog、dataStore 扩展 reasoning、`npx tsc --noEmit` 零错误
+- `06-08 23:59`: 需求5 执行计划制定完成（11 步骤）：双 API 调用、{stage} 提示词模板、Message.reasoning 字段、textarea 自由编辑草稿、删除 DraftContextMenu/InsertDialog
 - `06-08 23:30`: 需求1-4回顾修复：discardDraft 同步删除触发用户消息（保持对话一致性）；openaiProvider/anthropicProvider 的 testConnection 添加 AbortController 10 秒超时，防止目标不可达时无限挂起
 - `06-08 23:00`: 需求4 全部交付（S0-S10）：13 个 UI 组件、dataStore 增加 deleteMessage、useConversation 增加 discardDraft/regenerateDraft、WelcomeScreen、白蓝黑主题、段落级插入
 - `06-08 21:00`: 创建 6 个代码模块摘要（code-types/config-storage/data-store/ai-service/providers/hooks）；修复 req2/req3 的 source_contents 缺漏

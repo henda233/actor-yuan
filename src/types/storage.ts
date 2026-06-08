@@ -4,6 +4,7 @@ export interface Message {
   content: string;
   timestamp: number;
   status?: 'draft' | 'confirmed';
+  reasoning?: string;
 }
 
 export interface BillingPrice {

@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import type { Message } from '../types/storage';
 
 interface MessageBubbleProps {
   message: Message;
-  draftInserted?: boolean;
-  onParagraphContextMenu?: (e: React.MouseEvent, paragraphIndex: number) => void;
+  onDraftContentChange?: (content: string) => void;
 }
 
 function formatTime(timestamp: number): string {
@@ -12,10 +12,10 @@ function formatTime(timestamp: number): string {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export default function MessageBubble({ message, draftInserted, onParagraphContextMenu }: MessageBubbleProps) {
+export default function MessageBubble({ message, onDraftContentChange }: MessageBubbleProps) {
   const isUser = message.role === 'user';
   const isDraft = message.status === 'draft';
-  const paragraphs = message.content.split('\n');
+  const [reasoningOpen, setReasoningOpen] = useState(false);
 
   const bubbleClass = [
     'msg-bubble',
@@ -30,21 +30,34 @@ export default function MessageBubble({ message, draftInserted, onParagraphConte
         <span className="msg-time">{formatTime(message.timestamp)}</span>
         {isDraft && <span className="msg-draft-badge">草稿</span>}
       </div>
-      <div className="msg-content">
-        {paragraphs.map((p, i) => (
-          <p
-            key={i}
-            className="msg-paragraph"
-            onContextMenu={
-              isDraft && onParagraphContextMenu && !draftInserted
-                ? (e) => onParagraphContextMenu(e, i)
-                : undefined
-            }
-          >
-            {p || ' '}
-          </p>
-        ))}
-      </div>
+
+      {isDraft && message.reasoning && (
+        <details
+          className="msg-reasoning"
+          open={reasoningOpen}
+          onToggle={(e) => setReasoningOpen((e.target as HTMLDetailsElement).open)}
+        >
+          <summary className="msg-reasoning-summary">推演思路</summary>
+          <div className="msg-reasoning-content">{message.reasoning}</div>
+        </details>
+      )}
+
+      {isDraft ? (
+        <textarea
+          className="msg-draft-textarea"
+          value={message.content}
+          onChange={(e) => onDraftContentChange?.(e.target.value)}
+          rows={6}
+        />
+      ) : (
+        <div className="msg-content">
+          {message.content.split('\n').map((p, i) => (
+            <p key={i} className="msg-paragraph">
+              {p || ' '}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

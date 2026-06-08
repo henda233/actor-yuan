@@ -1,31 +1,29 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useDataStore } from './services/dataStore';
 import { useExitWarning } from './hooks/useExitWarning';
 import { useConversation } from './hooks/useConversation';
-import { getProvider, getApiKey } from './services/configStorage';
-import type { Message } from './types/storage';
+import { getProvider, getApiKey, getApiBaseUrl, getModel, getDebugMode } from './services/configStorage';
+import { createAIService } from './services/aiService';
 import TopBar from './components/TopBar';
 import WelcomeScreen from './components/WelcomeScreen';
 import MessageList from './components/MessageList';
 import ChatInput from './components/ChatInput';
 import ConfirmDraftBar from './components/ConfirmDraftBar';
-import DraftContextMenu from './components/DraftContextMenu';
-import InsertDialog from './components/InsertDialog';
 import RightPanel from './components/RightPanel';
 import SettingsPanel from './components/SettingsPanel';
 import ModulePanel from './components/ModulePanel';
 import BillingCorner from './components/BillingCorner';
+import DebugPanel from './components/DebugPanel';
 import './components/TopBar.css';
 import './components/MessageBubble.css';
 import './components/ChatInput.css';
 import './components/ConfirmDraftBar.css';
-import './components/DraftContextMenu.css';
-import './components/InsertDialog.css';
 import './components/RightPanel.css';
 import './components/SettingsPanel.css';
 import './components/ModulePanel.css';
 import './components/BillingCorner.css';
 import './components/WelcomeScreen.css';
+import './components/DebugPanel.css';
 import './App.css';
 
 function isConfigured(): boolean {
@@ -34,58 +32,46 @@ function isConfigured(): boolean {
   return p !== 'mock' && key !== null && key !== '';
 }
 
-interface ContextMenuState {
-  x: number;
-  y: number;
-  messageId: string;
-  paragraphIndex: number;
-}
-
-function calcInsertPosition(content: string, paragraphIndex: number): number {
-  const paragraphs = content.split('\n');
-  let pos = 0;
-  for (let i = 0; i <= paragraphIndex; i++) {
-    pos += paragraphs[i].length;
-    if (i < paragraphIndex) pos += 1;
-  }
-  return pos;
-}
-
 function App() {
   const { dirty } = useDataStore();
   useExitWarning(dirty);
 
-  const conv = useConversation();
+  const aiService = createAIService({
+    provider: getProvider(),
+    apiKey: getApiKey() ?? '',
+    apiBaseUrl: getApiBaseUrl(),
+    model: getModel() ?? '',
+  });
+
+  const conv = useConversation(aiService);
   const {
     phase,
     messages,
     loading,
+    loadingStage,
     error,
     draftMessage,
+    pendingReasoning,
+    debugEntries,
     sendMessage,
-    insertIntoDraft,
+    retryNarrative,
+    cancelPendingReasoning,
+    setDraftContent,
     discardDraft,
     regenerateDraft,
     confirmDraft,
   } = conv;
 
   const [panelOpen, setPanelOpen] = useState(false);
+  const [debugPanelOpen, setDebugPanelOpen] = useState(false);
   const [configured, setConfigured] = useState(isConfigured);
-  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
-  const [insertDialogOpen, setInsertDialogOpen] = useState(false);
-  const [insertTarget, setInsertTarget] = useState<{ messageId: string; position: number } | null>(null);
-  const [draftInserted, setDraftInserted] = useState(false);
-
-  useEffect(() => {
-    if (phase === 'chatting') {
-      setDraftInserted(false);
-    }
-  }, [phase]);
+  const [debugMode, setDebugModeState] = useState(getDebugMode);
 
   const handleTogglePanel = useCallback(() => {
     setPanelOpen((prev) => {
       if (prev) {
         setConfigured(isConfigured());
+        setDebugModeState(getDebugMode());
       }
       return !prev;
     });
@@ -94,32 +80,6 @@ function App() {
   const handleStartConfig = useCallback(() => {
     setPanelOpen(true);
   }, []);
-
-  const handleDraftContextMenu = useCallback(
-    (e: React.MouseEvent, messageId: string, paragraphIndex: number) => {
-      e.preventDefault();
-      setContextMenu({ x: e.clientX, y: e.clientY, messageId, paragraphIndex });
-    },
-    [],
-  );
-
-  const handleInsertClick = useCallback(() => {
-    if (!contextMenu || !draftMessage) return;
-    const position = calcInsertPosition(draftMessage.content, contextMenu.paragraphIndex);
-    setInsertTarget({ messageId: contextMenu.messageId, position });
-    setInsertDialogOpen(true);
-  }, [contextMenu, draftMessage]);
-
-  const handleInsertConfirm = useCallback(
-    (text: string) => {
-      if (!insertTarget) return;
-      insertIntoDraft(insertTarget.position, `【${text}】`);
-      setDraftInserted(true);
-      setInsertDialogOpen(false);
-      setInsertTarget(null);
-    },
-    [insertTarget, insertIntoDraft],
-  );
 
   const showWelcome = !configured && !panelOpen;
 
@@ -130,7 +90,13 @@ function App() {
 
   return (
     <div className="app-layout">
-      <TopBar panelOpen={panelOpen} onTogglePanel={handleTogglePanel} />
+      <TopBar
+        panelOpen={panelOpen}
+        onTogglePanel={handleTogglePanel}
+        debugMode={debugMode}
+        debugPanelOpen={debugPanelOpen}
+        onToggleDebugPanel={() => setDebugPanelOpen(prev => !prev)}
+      />
       <div className="app-main">
         <div className="chat-area">
           {showWelcome ? (
@@ -139,15 +105,22 @@ function App() {
             <>
               <MessageList
                 messages={messages}
-                draftInserted={draftInserted}
-                onDraftContextMenu={handleDraftContextMenu}
+                onDraftContentChange={setDraftContent}
               />
               {error && <div className="chat-error">{error}</div>}
               {phase === 'chatting' ? (
-                <ChatInput loading={loading} onSend={sendMessage} />
+                <ChatInput
+                  loading={loading}
+                  loadingStage={loadingStage}
+                  pendingReasoning={pendingReasoning !== null}
+                  onSend={sendMessage}
+                  onRetryNarrative={retryNarrative}
+                  onCancelPending={cancelPendingReasoning}
+                />
               ) : (
                 <ConfirmDraftBar
                   loading={loading}
+                  loadingStage={loadingStage}
                   onConfirm={confirmDraft}
                   onDiscard={discardDraft}
                   onRegenerate={regenerateDraft}
@@ -161,21 +134,10 @@ function App() {
         </aside>
       </div>
       <BillingCorner />
-      <DraftContextMenu
-        x={contextMenu?.x ?? 0}
-        y={contextMenu?.y ?? 0}
-        visible={contextMenu !== null}
-        disabled={draftInserted}
-        onInsert={handleInsertClick}
-        onClose={() => setContextMenu(null)}
-      />
-      <InsertDialog
-        visible={insertDialogOpen}
-        onConfirm={handleInsertConfirm}
-        onCancel={() => {
-          setInsertDialogOpen(false);
-          setInsertTarget(null);
-        }}
+      <DebugPanel
+        open={debugPanelOpen}
+        debugEntries={debugEntries}
+        onClose={() => setDebugPanelOpen(false)}
       />
     </div>
   );

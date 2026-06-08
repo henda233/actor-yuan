@@ -7,8 +7,8 @@ interface DataStoreContextValue {
   dirty: boolean;
   exportData: () => void;
   importData: (file: File) => Promise<void>;
-  addMessage: (role: Message['role'], content: string, status?: Message['status']) => void;
-  updateMessage: (id: string, patch: Partial<Pick<Message, 'content' | 'status'>>) => void;
+  addMessage: (role: Message['role'], content: string, status?: Message['status'], reasoning?: string) => void;
+  updateMessage: (id: string, patch: Partial<Pick<Message, 'content' | 'status' | 'reasoning'>>) => void;
   deleteMessage: (id: string) => void;
   setModule: (text: string) => void;
 }
@@ -55,13 +55,14 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
     setDirty(false);
   }, []);
 
-  const addMessage = useCallback((role: Message['role'], content: string, status?: Message['status']) => {
+  const addMessage = useCallback((role: Message['role'], content: string, status?: Message['status'], reasoning?: string) => {
     const msg: Message = {
       id: crypto.randomUUID(),
       role,
       content,
       timestamp: Date.now(),
       status,
+      reasoning,
     };
     setData((prev) => ({
       ...prev,
@@ -70,7 +71,7 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
     setDirty(true);
   }, []);
 
-  const updateMessage = useCallback((id: string, patch: Partial<Pick<Message, 'content' | 'status'>>) => {
+  const updateMessage = useCallback((id: string, patch: Partial<Pick<Message, 'content' | 'status' | 'reasoning'>>) => {
     setData((prev) => ({
       ...prev,
       messages: prev.messages.map((m) =>

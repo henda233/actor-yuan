@@ -48,3 +48,14 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.chat-retry-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 4px 0;
+}
+
+.chat-retry-actions {
+  display: flex;
+  gap: 8px;
+}

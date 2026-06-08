@@ -7,6 +7,7 @@ import {
   getModel, setModel,
   getBillingPrices, setBillingPrices,
   getSystemPrompt, setSystemPrompt,
+  getDebugMode, setDebugMode,
 } from '../services/configStorage';
 import { createAIService } from '../services/aiService';
 import { useDataStore } from '../services/dataStore';
@@ -20,10 +21,12 @@ export default function SettingsPanel() {
   const [apiBaseUrl, setApiBaseUrlState] = useState(getApiBaseUrl());
   const [model, setModelState] = useState(getModel() ?? '');
   const [systemPrompt, setSystemPromptState] = useState(getSystemPrompt());
+  const [promptError, setPromptError] = useState('');
   const [inputPrice, setInputPrice] = useState('0');
   const [outputPrice, setOutputPrice] = useState('0');
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [testMessage, setTestMessage] = useState('');
+  const [debugMode, setDebugModeState] = useState(getDebugMode);
 
   useEffect(() => {
     const prices = getBillingPrices();
@@ -54,7 +57,12 @@ export default function SettingsPanel() {
 
   const handleSystemPromptChange = (v: string) => {
     setSystemPromptState(v);
-    setSystemPrompt(v);
+    if (!v.includes('{stage}')) {
+      setPromptError('系统提示词必须包含 {stage} 占位符');
+    } else {
+      setPromptError('');
+      setSystemPrompt(v);
+    }
   };
 
   const handleSaveBilling = useCallback(() => {
@@ -202,6 +210,25 @@ export default function SettingsPanel() {
           placeholder="设置 AI 主持人的系统提示词..."
           rows={8}
         />
+        {promptError && <span className="setting-error">{promptError}</span>}
+      </div>
+
+      <div className="setting-divider" />
+
+      <div className="setting-group">
+        <label className="setting-label">Debug 模式</label>
+        <span className="setting-hint">开启后在 TopBar 显示 Debug 按钮，可查看每次 AI 交互的完整输入内容（系统提示词 + 消息列表）</span>
+        <label className="setting-checkbox-label">
+          <input
+            type="checkbox"
+            checked={debugMode}
+            onChange={(e) => {
+              setDebugModeState(e.target.checked);
+              setDebugMode(e.target.checked);
+            }}
+          />
+          <span>启用 Debug 面板</span>
+        </label>
       </div>
 
       <div className="setting-divider" />

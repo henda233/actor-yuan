@@ -1,14 +1,21 @@
+import type { LoadingStage } from '../hooks/useConversation';
+
 interface ConfirmDraftBarProps {
   loading: boolean;
+  loadingStage: LoadingStage;
   onConfirm: () => void;
   onDiscard: () => void;
   onRegenerate: () => void;
 }
 
-export default function ConfirmDraftBar({ loading, onConfirm, onDiscard, onRegenerate }: ConfirmDraftBarProps) {
+export default function ConfirmDraftBar({ loading, loadingStage, onConfirm, onDiscard, onRegenerate }: ConfirmDraftBarProps) {
+  const loadingText = loadingStage === 'reasoning'
+    ? 'AI 正在推演剧情思路...'
+    : 'AI 正在输出游戏情节...';
+
   return (
     <div className="confirm-draft-bar">
-      <span className="confirm-draft-hint">草稿待确认 —— 右键草稿文本可插入判定结果</span>
+      <span className="confirm-draft-hint">草稿待确认 —— 直接在文本框中编辑草稿内容</span>
       <div className="confirm-draft-actions">
         <button
           type="button"
@@ -24,7 +31,7 @@ export default function ConfirmDraftBar({ loading, onConfirm, onDiscard, onRegen
           onClick={onRegenerate}
           disabled={loading}
         >
-          {loading ? '生成中...' : '重新生成'}
+          {loading ? loadingText : '重新生成'}
         </button>
         <button
           type="button"
