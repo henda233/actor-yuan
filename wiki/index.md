@@ -14,6 +14,8 @@
 | `需求5-输出模式` | [🔗](./abstract/req5.md) | 推演方案（隐藏）+ 情节正文双输出 | ⚠️ 依赖需求2、3 | 06-08 |
 | `需求6-API计费` | [🔗](./abstract/req6.md) | 按模型配置价格、token用量与费用展示、会话累计 | ⚠️ 依赖需求1、3 | 06-08 |
 | `需求7-模组导入` | [🔗](./abstract/req7.md) | 纯文本/Markdown模组导入、系统提示词注入、查看编辑 | ⚠️ 依赖需求1、3 | 06-08 |
+| `Vite项目初始化` | [🔗](./abstract/init-vite.md) | Vite 8 + React 19 + TS 6 + react-router 7 项目骨架已就绪 | ✅ 无循环依赖 | 06-08 |
+| `React Router Data模式笔记` | [🔗](./abstract/react-router-data-patterns.md) | Data模式、路由结构、fetcher API调用、pending UI、纯前端适配策略 | ✅ 无循环依赖 | 06-08 |
 
 ## 实现优先级
 
@@ -32,6 +34,7 @@
 
 ## TODO列表
 
+- [x] 项目脚手架初始化（Vite + React + react-router）
 - [ ] 制定需求1（数据存储）的执行计划
 - [ ] 制定需求2（核心交互）的执行计划
 - [ ] 制定需求3（API兼容）的执行计划
@@ -60,6 +63,8 @@
 
 ## 全局更新日志
 
+- `06-08 16:30`: 阅读 `docs/react_routers/` 全部文档，编写 React Router Data 模式开发笔记，创建 `wiki/abstract/react-router-data-patterns.md`
+- `06-08 16:03`: Vite 8 + React 19.2.6 + TS 6.0 + react-router 7.17.0 项目脚手架初始化完成，创建 `wiki/abstract/init-vite.md`
 - `06-08`: WIKI 记忆库初始化，基于 `docs/项目文档 OUTDATE.md` 创建项目总览与 5 个需求摘要
 - `06-08 14:30`: 需求2泛化 —— "判定规则"→"游戏规则计算"，涵盖判定/伤害/状态/资源等，统一术语
 - `06-08`: 需求对齐讨论 —— 新增 req6（API计费）、req7（模组导入）；更新 req1（扩展数据范围）、req3（增加token提取）、req4（增加计费展示与模组管理入口）；确认流式响应暂不需要；确定 MVP 范围与优先级
