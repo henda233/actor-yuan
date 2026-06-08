@@ -5,7 +5,7 @@ import type { AIService } from '../aiService';
 export function createOpenAIProvider(apiKey: string, apiBaseUrl: string, model: string): AIService {
   const endpoint = apiBaseUrl.replace(/\/+$/, '') + '/chat/completions';
 
-  const callAPI = async (body: unknown): Promise<Response> => {
+  const callAPI = async (body: unknown, signal?: AbortSignal): Promise<Response> => {
     let response: Response;
     try {
       response = await fetch(endpoint, {
@@ -15,8 +15,12 @@ export function createOpenAIProvider(apiKey: string, apiBaseUrl: string, model: 
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify(body),
+        signal,
       });
     } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') {
+        throw new AINetworkError('连接超时，请检查网络或目标地址');
+      }
       throw new AINetworkError(e instanceof Error ? e.message : '网络请求失败');
     }
     if (!response.ok) await handleAPIError(response);
@@ -45,11 +49,17 @@ export function createOpenAIProvider(apiKey: string, apiBaseUrl: string, model: 
     },
 
     async testConnection(): Promise<void> {
-      await callAPI({
-        model,
-        messages: [{ role: 'user', content: 'ping' }],
-        max_tokens: 5,
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10_000);
+      try {
+        await callAPI({
+          model,
+          messages: [{ role: 'user', content: 'ping' }],
+          max_tokens: 5,
+        }, controller.signal);
+      } finally {
+        clearTimeout(timeoutId);
+      }
     },
   };
 }

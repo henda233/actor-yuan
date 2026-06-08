@@ -1,6 +1,6 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-08 23:00
+> 🔄 最后同步：2026-06-08 23:30
 
 ## 模块总览
 
@@ -37,7 +37,7 @@
 
 - [ ] 制定需求6（API计费）的执行计划
 - [ ] 制定需求7（模组导入）的执行计划
-- [ ] 制定需求5（输出模式）的执行计划 —— 延后
+- [ ] 制定需求5（输出模式）的执行计划
 
 ## 笔记
 
@@ -65,6 +65,7 @@
 
 ## 全局更新日志
 
+- `06-08 23:30`: 需求1-4回顾修复：discardDraft 同步删除触发用户消息（保持对话一致性）；openaiProvider/anthropicProvider 的 testConnection 添加 AbortController 10 秒超时，防止目标不可达时无限挂起
 - `06-08 23:00`: 需求4 全部交付（S0-S10）：13 个 UI 组件、dataStore 增加 deleteMessage、useConversation 增加 discardDraft/regenerateDraft、WelcomeScreen、白蓝黑主题、段落级插入
 - `06-08 21:00`: 创建 6 个代码模块摘要（code-types/config-storage/data-store/ai-service/providers/hooks）；修复 req2/req3 的 source_contents 缺漏
 - `06-08 20:30`: 需求3 WIKI 记忆库全面更新（计划、摘要、index），补充错误分类、baseUrl 决策、完整测试方案

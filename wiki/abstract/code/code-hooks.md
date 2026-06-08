@@ -11,7 +11,7 @@ dependencies:
   - "src/services/configStorage.ts"
   - "src/services/providers/mockProvider.ts"
 created_at: 2026-06-08 21:00
-updated_at: 2026-06-08 23:00
+updated_at: 2026-06-08 23:30
 ---
 # 摘要：自定义 Hooks 与测试面板
 
@@ -58,7 +58,7 @@ updated_at: 2026-06-08 23:00
 | `sendMessage` | `(content: string) => Promise<void>` | 发送用户消息 → 获取 AI 草稿 → 进入 `reviewing_draft` |
 | `insertIntoDraft` | `(position: number, text: string) => void` | 在草稿指定位置插入文本（插入游戏规则计算结果） |
 | `consultDraft` | `() => void` | 确认草稿，标记为 `confirmed`，切回 `chatting` |
-| `discardDraft` | `() => void` | 删除草稿消息 → `deleteMessage(draftMessage.id)` → 切回 `chatting` |
+| `discardDraft` | `() => void` | 删除草稿消息及触发它的用户消息 → 切回 `chatting`（通过查找 draft 前一条 user 消息并一并删除） |
 | `regenerateDraft` | `() => Promise<void>` | 删除当前草稿 → 保留历史消息 → 重新调用 AI → 新草稿（不新增用户消息）；`phase` 保持 `reviewing_draft` |
 
 ### useExitWarning 导出

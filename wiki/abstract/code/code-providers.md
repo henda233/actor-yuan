@@ -8,7 +8,7 @@ dependencies:
   - "src/types/storage.ts"
   - "src/services/aiService.ts"
 created_at: 2026-06-08 21:00
-updated_at: 2026-06-08 21:00
+updated_at: 2026-06-08 23:30
 ---
 # 摘要：AI 提供商实现（src/services/providers/*.ts）
 
@@ -19,7 +19,7 @@ updated_at: 2026-06-08 21:00
 - **Anthropic** 有两个关键适配：(1) system prompt 提至顶层 `system` 字段而非作为消息；(2) 消息必须 `user`/`assistant` 严格交替
 - **Anthropic 角色交替策略**：连续同角色以 `\n\n` 合并；首条为 assistant 时自动插入空 user 占位
 - 所有 Provider 的 `chat()` 内部 `catch` 网络异常 → `AINetworkError`；非 ok 响应通过共享的 `handleAPIError` 统一处理
-- `testConnection` 发送 `{ role: 'user', content: 'ping' }` 极简消息（`max_tokens: 5`），仅验证连通性
+- `testConnection` 发送 `{ role: 'user', content: 'ping' }` 极简消息（`max_tokens: 5`），仅验证连通性；使用 `AbortController` + 10 秒超时，超时抛 `AINetworkError('连接超时，请检查网络或目标地址')`
 - Mock Provider 保留 500ms 模拟延迟，返回零值 `usage`，确保无 API Key 时可调试 UI
 
 ## 内容概述

@@ -92,9 +92,14 @@ export function useConversation(aiService?: AIService) {
     if (phase !== 'reviewing_draft' || !draftMessage) {
       throw new Error('当前没有待确认的草稿');
     }
+    const messages = data.messages;
+    const draftIndex = messages.findIndex((m) => m.id === draftMessage.id);
+    if (draftIndex > 0 && messages[draftIndex - 1].role === 'user') {
+      deleteMessage(messages[draftIndex - 1].id);
+    }
     deleteMessage(draftMessage.id);
     setPhase('chatting');
-  }, [phase, draftMessage, deleteMessage]);
+  }, [phase, draftMessage, data.messages, deleteMessage]);
 
   const regenerateDraft = useCallback(async () => {
     if (phase !== 'reviewing_draft' || !draftMessage) {

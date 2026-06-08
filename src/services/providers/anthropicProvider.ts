@@ -26,7 +26,7 @@ function normalizeMessages(
 }
 
 export function createAnthropicProvider(apiKey: string, model: string): AIService {
-  const callAPI = async (body: unknown): Promise<Response> => {
+  const callAPI = async (body: unknown, signal?: AbortSignal): Promise<Response> => {
     let response: Response;
     try {
       response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -37,8 +37,12 @@ export function createAnthropicProvider(apiKey: string, model: string): AIServic
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify(body),
+        signal,
       });
     } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') {
+        throw new AINetworkError('连接超时，请检查网络或目标地址');
+      }
       throw new AINetworkError(e instanceof Error ? e.message : '网络请求失败');
     }
     if (!response.ok) await handleAPIError(response);
@@ -68,11 +72,17 @@ export function createAnthropicProvider(apiKey: string, model: string): AIServic
     },
 
     async testConnection(): Promise<void> {
-      await callAPI({
-        model,
-        max_tokens: 5,
-        messages: [{ role: 'user', content: 'ping' }],
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10_000);
+      try {
+        await callAPI({
+          model,
+          max_tokens: 5,
+          messages: [{ role: 'user', content: 'ping' }],
+        }, controller.signal);
+      } finally {
+        clearTimeout(timeoutId);
+      }
     },
   };
 }
