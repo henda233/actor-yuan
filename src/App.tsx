@@ -86,11 +86,6 @@ function App() {
 
   const showWelcome = !configured && !panelOpen;
 
-  const rightPanelTabs = [
-    { key: 'settings', label: '设置', content: <SettingsPanel /> },
-    { key: 'module', label: '模组', content: <ModulePanel /> },
-  ];
-
   return (
     <div className="app-layout">
       <TopBar
@@ -134,9 +129,14 @@ function App() {
             </>
           )}
         </div>
-        <aside className={panelOpen ? 'right-panel' : 'right-panel-hidden'}>
-          <RightPanel tabs={rightPanelTabs} />
-        </aside>
+        {panelOpen && (
+          <aside className="right-panel">
+            <RightPanel tabs={[
+              { key: 'settings', label: '设置', content: <SettingsPanel /> },
+              { key: 'module', label: '模组', content: <ModulePanel /> },
+            ]} />
+          </aside>
+        )}
       </div>
       <BillingCorner />
       <DebugPanel

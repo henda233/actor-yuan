@@ -70,7 +70,7 @@ export default function ChatInput({
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="输入你的操作..."
-        rows={2}
+        rows={3}
         disabled={loading}
       />
       <button

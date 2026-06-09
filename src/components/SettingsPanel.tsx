@@ -110,202 +110,205 @@ export default function SettingsPanel() {
 
   return (
     <div className="settings-panel">
-      <div className="setting-group">
-        <label className="setting-label">Provider</label>
-        <select
-          className="setting-select"
-          value={provider}
-          onChange={(e) => handleProviderChange(e.target.value as ProviderType)}
-        >
-          <option value="mock">Mock（无 API 测试用）</option>
-          <option value="openai">OpenAI 兼容</option>
-          <option value="anthropic">Anthropic</option>
-        </select>
-      </div>
+      <details className="setting-details" open>
+        <summary className="setting-summary">连接配置</summary>
+        <div className="setting-details-body">
+          <div className="setting-group">
+            <label className="setting-label">Provider</label>
+            <select
+              className="setting-select"
+              value={provider}
+              onChange={(e) => handleProviderChange(e.target.value as ProviderType)}
+            >
+              <option value="mock">Mock（无 API 测试用）</option>
+              <option value="openai">OpenAI 兼容</option>
+              <option value="anthropic">Anthropic</option>
+            </select>
+          </div>
 
-      <div className="setting-group">
-        <label className="setting-label">API Key</label>
-        <input
-          className="setting-input"
-          type="password"
-          value={apiKey}
-          onChange={(e) => handleApiKeyChange(e.target.value)}
-          placeholder={provider === 'mock' ? 'Mock 模式无需 API Key' : '输入 API Key'}
-        />
-      </div>
+          <div className="setting-group">
+            <label className="setting-label">API Key</label>
+            <input
+              className="setting-input"
+              type="password"
+              value={apiKey}
+              onChange={(e) => handleApiKeyChange(e.target.value)}
+              placeholder={provider === 'mock' ? 'Mock 模式无需 API Key' : '输入 API Key'}
+            />
+          </div>
 
-      {provider === 'openai' && (
-        <div className="setting-group">
-          <label className="setting-label">Base URL</label>
-          <input
-            className="setting-input"
-            type="text"
-            value={apiBaseUrl}
-            onChange={(e) => handleApiBaseUrlChange(e.target.value)}
-            placeholder="https://api.openai.com/v1"
-          />
-        </div>
-      )}
+          {provider === 'openai' && (
+            <div className="setting-group">
+              <label className="setting-label">Base URL</label>
+              <input
+                className="setting-input"
+                type="text"
+                value={apiBaseUrl}
+                onChange={(e) => handleApiBaseUrlChange(e.target.value)}
+                placeholder="https://api.openai.com/v1"
+              />
+            </div>
+          )}
 
-      <div className="setting-group">
-        <label className="setting-label">Model ID</label>
-        <input
-          className="setting-input"
-          type="text"
-          value={model}
-          onChange={(e) => handleModelChange(e.target.value)}
-          placeholder="gpt-4o-mini / claude-sonnet-4-6"
-        />
-      </div>
+          <div className="setting-group">
+            <label className="setting-label">Model ID</label>
+            <input
+              className="setting-input"
+              type="text"
+              value={model}
+              onChange={(e) => handleModelChange(e.target.value)}
+              placeholder="gpt-4o-mini / claude-sonnet-4-6"
+            />
+          </div>
 
-      <button
-        type="button"
-        className="btn btn-regenerate setting-test-btn"
-        onClick={handleTestConnection}
-        disabled={testStatus === 'testing' || (provider !== 'mock' && !apiKey)}
-      >
-        {testStatus === 'testing' ? '测试中...' : '测试连接'}
-      </button>
-      {testMessage && (
-        <span className={`setting-test-msg ${testStatus === 'success' ? 'setting-test-ok' : 'setting-test-err'}`}>
-          {testMessage}
-        </span>
-      )}
-
-      <div className="setting-divider" />
-
-      <div className="setting-group">
-        <label className="setting-label">计费价格（每百万 token）</label>
-        <div className="setting-billing-row">
-          <input
-            className="setting-input setting-billing-input"
-            type="number"
-            min="0"
-            step="0.001"
-            value={inputPrice}
-            onChange={(e) => setInputPrice(e.target.value)}
-            placeholder="输入价格"
-          />
-          <span className="setting-billing-label">输入</span>
-          <input
-            className="setting-input setting-billing-input"
-            type="number"
-            min="0"
-            step="0.001"
-            value={outputPrice}
-            onChange={(e) => setOutputPrice(e.target.value)}
-            placeholder="输出价格"
-          />
-          <span className="setting-billing-label">输出</span>
-          <button type="button" className="btn btn-confirm" onClick={handleSaveBilling}>
-            保存
+          <button
+            type="button"
+            className="btn btn-regenerate setting-test-btn"
+            onClick={handleTestConnection}
+            disabled={testStatus === 'testing' || (provider !== 'mock' && !apiKey)}
+          >
+            {testStatus === 'testing' ? '测试中...' : '测试连接'}
           </button>
+          {testMessage && (
+            <span className={`setting-test-msg ${testStatus === 'success' ? 'setting-test-ok' : 'setting-test-err'}`}>
+              {testMessage}
+            </span>
+          )}
         </div>
-        <span className="setting-hint">当前模型：{model || '未设置'}</span>
-      </div>
+      </details>
 
-      <div className="setting-divider" />
+      <details className="setting-details" open>
+        <summary className="setting-summary">计费配置</summary>
+        <div className="setting-details-body">
+          <div className="setting-group">
+            <label className="setting-label">计费价格（每百万 token）</label>
+            <div className="setting-billing-row">
+              <input
+                className="setting-input setting-billing-input"
+                type="number"
+                min="0"
+                step="0.001"
+                value={inputPrice}
+                onChange={(e) => setInputPrice(e.target.value)}
+                placeholder="输入价格"
+              />
+              <span className="setting-billing-label">输入</span>
+              <input
+                className="setting-input setting-billing-input"
+                type="number"
+                min="0"
+                step="0.001"
+                value={outputPrice}
+                onChange={(e) => setOutputPrice(e.target.value)}
+                placeholder="输出价格"
+              />
+              <span className="setting-billing-label">输出</span>
+              <button type="button" className="btn btn-confirm" onClick={handleSaveBilling}>
+                保存
+              </button>
+            </div>
+            <span className="setting-hint">当前模型：{model || '未设置'}</span>
+          </div>
 
-      <div className="setting-group">
-        <label className="setting-label">计费功能</label>
-        <label className="setting-checkbox-label">
-          <input
-            type="checkbox"
-            checked={billingEnabled}
-            onChange={(e) => {
-              setBillingEnabledState(e.target.checked);
-              setBillingEnabled(e.target.checked);
-            }}
-          />
-          <span>启用计费（关闭后仅展示 tokens 用量，隐藏费用）</span>
-        </label>
-      </div>
+          <div className="setting-group">
+            <label className="setting-label">计费功能</label>
+            <label className="setting-checkbox-label">
+              <input
+                type="checkbox"
+                checked={billingEnabled}
+                onChange={(e) => {
+                  setBillingEnabledState(e.target.checked);
+                  setBillingEnabled(e.target.checked);
+                }}
+              />
+              <span>启用计费（关闭后仅展示 tokens 用量，隐藏费用）</span>
+            </label>
+          </div>
 
-      <div className="setting-group">
-        <button
-          type="button"
-          className="btn btn-regenerate"
-          onClick={() => {
-            if (window.confirm('确定要重置会话用量统计吗？此操作不可撤销。')) {
-              resetBilling();
-            }
-          }}
-        >
-          重置会话用量
-        </button>
-      </div>
-
-      <div className="setting-divider" />
-
-      <div className="setting-group">
-        <label className="setting-label">系统提示词</label>
-        <textarea
-          className="setting-textarea"
-          value={systemPrompt}
-          onChange={(e) => handleSystemPromptChange(e.target.value)}
-          placeholder="设置 AI 主持人的系统提示词..."
-          rows={8}
-        />
-        {promptError && <span className="setting-error">{promptError}</span>}
-      </div>
-
-      <div className="setting-divider" />
-
-      <div className="setting-group">
-        <label className="setting-label">Debug 模式</label>
-        <span className="setting-hint">开启后在 TopBar 显示 Debug 按钮，可查看每次 AI 交互的完整输入内容（系统提示词 + 消息列表）</span>
-        <label className="setting-checkbox-label">
-          <input
-            type="checkbox"
-            checked={debugMode}
-            onChange={(e) => {
-              setDebugModeState(e.target.checked);
-              setDebugMode(e.target.checked);
-            }}
-          />
-          <span>启用 Debug 面板</span>
-        </label>
-      </div>
-
-      <div className="setting-divider" />
-
-      <div className="setting-group">
-        <label className="setting-label">草稿编辑重写模式</label>
-        <span className="setting-hint">编辑草稿保存后 AI 重写的行为：仅重写情节（保留推演方案）或完全重新生成</span>
-        <select
-          className="setting-select"
-          value={draftEditRewriteMode}
-          onChange={(e) => {
-            const v = e.target.value as DraftEditRewriteMode;
-            setDraftEditRewriteModeState(v);
-            setDraftEditRewriteMode(v);
-          }}
-        >
-          <option value="narrative-only">仅重写情节（保留推演方案）</option>
-          <option value="full">完全重新生成</option>
-        </select>
-      </div>
-
-      <div className="setting-divider" />
-
-      <div className="setting-group">
-        <label className="setting-label">数据管理</label>
-        <div className="setting-io-row">
-          <button type="button" className="btn btn-regenerate" onClick={exportData}>
-            导出数据
-          </button>
-          <button type="button" className="btn btn-regenerate" onClick={() => fileInputRef.current?.click()}>
-            导入数据
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            style={{ display: 'none' }}
-            onChange={handleImport}
-          />
+          <div className="setting-group">
+            <button
+              type="button"
+              className="btn btn-regenerate"
+              onClick={() => {
+                if (window.confirm('确定要重置会话用量统计吗？此操作不可撤销。')) {
+                  resetBilling();
+                }
+              }}
+            >
+              重置会话用量
+            </button>
+          </div>
         </div>
-      </div>
+      </details>
+
+      <details className="setting-details">
+        <summary className="setting-summary">高级设置</summary>
+        <div className="setting-details-body">
+          <div className="setting-group">
+            <label className="setting-label">系统提示词</label>
+            <textarea
+              className="setting-textarea"
+              value={systemPrompt}
+              onChange={(e) => handleSystemPromptChange(e.target.value)}
+              placeholder="设置 AI 主持人的系统提示词..."
+              rows={8}
+            />
+            {promptError && <span className="setting-error">{promptError}</span>}
+          </div>
+
+          <div className="setting-group">
+            <label className="setting-label">Debug 模式</label>
+            <span className="setting-hint">开启后在 TopBar 显示 Debug 按钮，可查看每次 AI 交互的完整输入内容（系统提示词 + 消息列表）</span>
+            <label className="setting-checkbox-label">
+              <input
+                type="checkbox"
+                checked={debugMode}
+                onChange={(e) => {
+                  setDebugModeState(e.target.checked);
+                  setDebugMode(e.target.checked);
+                }}
+              />
+              <span>启用 Debug 面板</span>
+            </label>
+          </div>
+
+          <div className="setting-group">
+            <label className="setting-label">草稿编辑重写模式</label>
+            <span className="setting-hint">编辑草稿保存后 AI 重写的行为：仅重写情节（保留推演方案）或完全重新生成</span>
+            <select
+              className="setting-select"
+              value={draftEditRewriteMode}
+              onChange={(e) => {
+                const v = e.target.value as DraftEditRewriteMode;
+                setDraftEditRewriteModeState(v);
+                setDraftEditRewriteMode(v);
+              }}
+            >
+              <option value="narrative-only">仅重写情节（保留推演方案）</option>
+              <option value="full">完全重新生成</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <label className="setting-label">数据管理</label>
+            <div className="setting-io-row">
+              <button type="button" className="btn btn-regenerate" onClick={exportData}>
+                导出数据
+              </button>
+              <button type="button" className="btn btn-regenerate" onClick={() => fileInputRef.current?.click()}>
+                导入数据
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                style={{ display: 'none' }}
+                onChange={handleImport}
+              />
+            </div>
+          </div>
+        </div>
+      </details>
     </div>
   );
 }

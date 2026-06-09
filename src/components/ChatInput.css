@@ -8,7 +8,8 @@
 
 .chat-input-textarea {
   flex: 1;
-  resize: none;
+  resize: vertical;
+  max-height: 50vh;
   padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: 8px;

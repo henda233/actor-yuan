@@ -27,6 +27,7 @@
 | `项目功能文档` | [🔗](./abstract/doc-features.md) | 面向用户的功能说明：概述、架构、6 个已实现功能、2 个规划中功能、运行构建 | ✅ | 06-08 |
 | `修复测试问题` | [🔗](./abstract/fix-issues.md) | 数据模型扩展（contextHistory/resetMessages）、phase同步修复、单轮对话重构、草稿编辑状态机、模组注入system prompt | ✅ 已交付 | 06-09 |
 | `需求1435-数据编辑与复制` | [🔗](./abstract/req_1435.md) | 新增DataEditorPanel（遮罩面板编辑module/contextHistory/messages）+ MessageBubble复制按钮（保留Markdown） | ✅ 已交付 | 06-09 |
+| `UI/UX优化` | [🔗](./abstract/ui-ux-optimization.md) | 修复 --primary CSS bug + 消息对齐 + BillingCorner位置 + ChatInput/设置折叠/条件挂载（S5滚动按钮/S8宽度统一已跳过） | ✅ 已交付 | 06-09 |
 
 ## 计划状态
 
@@ -41,6 +42,7 @@
 | `需求7-模组导入` | [plan/req7.md](./plan/req7.md) | 7 | completed |
 | `需求6-API计费` | [plan/req6.md](./plan/req6.md) | 9 | completed |
 | `需求1435-数据编辑与复制` | [plan/req_1435.md](./plan/req_1435.md) | 6 | completed |
+| `UI/UX优化` | [plan/ui-ux-optimization.md](./plan/ui-ux-optimization.md) | 8 | completed |
 
 ## TODO列表
 
@@ -71,6 +73,7 @@
 
 ## 全局更新日志
 
+- `06-09 17:00`: **UI/UX优化 全部交付（S5/S8跳过）**：S1 `--primary: var(--blue)` 补充 → S2 消息对齐交换 → S3 BillingCorner top:52px → S4 ChatInput rows=3+resize+max-height:50vh → S6 设置面板三组 details 折叠 → S7 右侧面板条件挂载+移除 dead CSS。`npx tsc --noEmit` 零错误
 - `06-09 16:15`: **需求1435 修订**：contextHistory 改为单个 textarea 整体编辑（不再 `\n\n` 拆分），面板扩至 80vw，dataStore 新增 `setContextHistory` 方法。`npx tsc --noEmit` 零错误
 - `06-09 16:00`: **需求1435 全部交付（S1-S6）**：dataStore 新增 setContextHistoryEntry/deleteContextHistoryEntry；MessageBubble 包裹 wrapper + 复制按钮（1.5s "✓ 已复制"）；DataEditorPanel（560px、三区域 module/contextHistory/messages、美化 textarea、z-index:99）；TopBar "数据编辑" 按钮（始终可见）；App.tsx 集成。`npx tsc --noEmit` 零错误
 - `06-09 15:30`: **需求1435 计划制定**：对齐确认数据编辑面板（遮罩面板、实时编辑 module/contextHistory/messages 的 content）+ 复制按钮（气泡下方、保留 Markdown、"✓ 已复制" 反馈）。制定 6 步骤计划，新增 `wiki/request/req_1435.md`、`wiki/plan/req_1435.md`、`wiki/abstract/req_1435.md`，更新 index

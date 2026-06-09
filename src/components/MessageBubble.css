@@ -5,11 +5,11 @@
 }
 
 .msg-user-wrapper {
-  align-self: flex-start;
+  align-self: flex-end;
 }
 
 .msg-ai-wrapper {
-  align-self: flex-end;
+  align-self: flex-start;
 }
 
 .msg-draft-wrapper {
