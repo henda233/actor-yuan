@@ -2,6 +2,20 @@ import { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import type { AppData, ExportData, Message, MessageBilling, SessionBilling } from '../types/storage';
 
+export function generateUUID(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const toHex = (b: number) => b.toString(16).padStart(2, '0');
+  return [
+    bytes.slice(0, 4),
+    bytes.slice(4, 6),
+    bytes.slice(6, 8),
+    bytes.slice(8, 10),
+    bytes.slice(10, 16),
+  ].map((seg) => Array.from(seg, toHex).join('')).join('-');
+}
+
 interface DataStoreContextValue {
   data: AppData;
   dirty: boolean;
@@ -104,7 +118,7 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
 
   const addMessage = useCallback((role: Message['role'], content: string, status?: Message['status'], reasoning?: string, billing?: MessageBilling) => {
     const msg: Message = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       role,
       content,
       timestamp: Date.now(),

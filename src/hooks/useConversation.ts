@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { useDataStore } from '../services/dataStore';
+import { useDataStore, generateUUID } from '../services/dataStore';
 import { buildSystemPrompt, getDebugMode, getDraftEditRewriteMode, getBillingPrices, getModel } from '../services/configStorage';
 import { calculateCost } from '../services/billingService';
 import type { AIService } from '../services/aiService';
@@ -115,7 +115,7 @@ export function useConversation(aiService?: AIService) {
 
       const userContent = buildUserContent(content);
       const userMsg: Message = {
-        id: crypto.randomUUID(),
+        id: generateUUID(),
         role: 'user',
         content: userContent,
         timestamp: Date.now(),
