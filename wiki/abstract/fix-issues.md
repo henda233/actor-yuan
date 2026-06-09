@@ -3,6 +3,17 @@ abstract_name: 修复测试发现的4个问题
 source_contents:
   - "docs/issues.md"
   - "wiki/plan/fix-issues.md"
+  - "src/types/storage.ts"
+  - "src/services/configStorage.ts"
+  - "src/services/dataStore.tsx"
+  - "src/hooks/useConversation.ts"
+  - "src/components/MessageBubble.tsx"
+  - "src/components/MessageBubble.css"
+  - "src/components/MessageList.tsx"
+  - "src/components/ChatInput.tsx"
+  - "src/components/BillingCorner.tsx"
+  - "src/components/BillingCorner.css"
+  - "src/App.tsx"
 dependencies:
   - "wiki/abstract/overview.md"
   - "wiki/abstract/req2.md"

@@ -14,6 +14,7 @@ source_contents:
   - "src/components/BillingCorner.tsx"
   - "src/components/WelcomeScreen.tsx"
   - "src/components/DebugPanel.tsx"
+  - "src/components/Dialog.tsx"
 dependencies:
   - "src/types/storage.ts"
   - "src/services/configStorage.ts"
@@ -47,10 +48,11 @@ updated_at: 2026-06-09
 | `ChatInput` | `ChatInput.tsx` | 输入框 + 发送按钮；分阶段 loading 文案；pendingReasoning 重试/取消 UI |
 | `RightPanel` | `RightPanel.tsx` | 面板外壳 + Tab 切换（设置/模组） |
 | `SettingsPanel` | `SettingsPanel.tsx` | Provider/API Key/Base URL/Model/测试连接/计费价格/系统提示词/Debug 开关/导入导出 |
-| `ModulePanel` | `ModulePanel.tsx` | 模组管理占位 |
+| `ModulePanel` | `ModulePanel.tsx` | 模组管理：文件导入(.txt/.md)、textarea编辑、替换/追加、元信息展示 |
 | `BillingCorner` | `BillingCorner.tsx` | fixed 顶部居中会话用量显示 |
 | `WelcomeScreen` | `WelcomeScreen.tsx` | 居中引导卡片 |
 | `DebugPanel` | `DebugPanel.tsx` | 右侧遮罩面板，双阶段 AI 输入展示（系统提示词 + 可折叠消息列表） |
+| `Dialog` | `Dialog.tsx` | 通用弹窗：遮罩+居中卡片，多按钮配置，风格统一 |
 
 ### App.tsx 状态管理
 
@@ -66,6 +68,7 @@ updated_at: 2026-06-09
 - `src/index.css`：CSS 变量、reset、全局 `.btn` 样式
 - `src/App.css`：布局样式
 - `src/components/*.css`：各组件独立样式
+- `src/components/Dialog.css`：弹窗遮罩+居中卡片样式
 - `DebugPanel.css`：遮罩层 + 右侧面板 + code block + 消息折叠
 
 ## 依赖与影响链

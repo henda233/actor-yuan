@@ -10,24 +10,38 @@ ActorYuan 是基于大模型的 AI 跑团（TRPG）主持人交互 Web 应用，
 
 ```
 wiki/
-├── readme.md          # 本文件 —— WIKI 概述与导航入口
-├── index.md           # 全局摘要索引（所有任务开始时必读）
-├── abstract/          # 摘要目录
-│   ├── overview.md    # 项目总览摘要
-│   ├── code/          # 代码模块摘要
-│   │   ├── code-types.md
-│   │   ├── code-config-storage.md
-│   │   ├── code-data-store.md
-│   │   ├── code-ai-service.md
-│   │   ├── code-providers.md
-│   │   └── code-hooks.md
-│   ├── req1.md        # 需求1：纯前端 + 本地 JSON 数据存储
-│   ├── req2.md        # 需求2：AI 主持人核心交互流程
-│   ├── req3.md        # 需求3：大模型 API 兼容（OpenAI / Anthropic）
-│   ├── req4.md        # 需求4：UI 设计与交互模式
-│   └── req5.md        # 需求5：AI 主持人双输出模式
-├── request/           # 用户需求记录
-└── plan/              # 执行计划
+├── readme.md              # 本文件 —— WIKI 概述与导航入口
+├── index.md               # 全局摘要索引（所有任务开始时必读）
+├── abstract/              # 摘要目录
+│   ├── overview.md        # 项目总览摘要
+│   ├── req1.md            # 需求1：纯前端 + 本地 JSON 数据存储
+│   ├── req2.md            # 需求2：AI 主持人核心交互流程
+│   ├── req3.md            # 需求3：大模型 API 兼容（OpenAI / Anthropic）
+│   ├── req4.md            # 需求4：UI 设计与交互模式
+│   ├── req5.md            # 需求5：AI 主持人双输出模式
+│   ├── req6.md            # 需求6：API 计费（待制定计划）
+│   ├── req7.md            # 需求7：模组导入
+│   ├── fix-issues.md      # 修复测试问题
+│   ├── doc-features.md    # 项目功能文档
+│   ├── init-vite.md       # Vite 项目初始化
+│   ├── react-router-data-patterns.md  # React Router Data 模式笔记
+│   └── code/              # 代码模块摘要
+│       ├── code-types.md
+│       ├── code-config-storage.md
+│       ├── code-data-store.md
+│       ├── code-ai-service.md
+│       ├── code-providers.md
+│       ├── code-hooks.md
+│       └── code-ui-components.md
+├── request/               # 用户需求记录
+└── plan/                  # 执行计划
+    ├── req1.md
+    ├── req2.md
+    ├── req3.md
+    ├── req4.md
+    ├── req5.md
+    ├── req7.md
+    └── fix-issues.md
 ```
 
 ## 阅读规范

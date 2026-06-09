@@ -3,12 +3,19 @@ abstract_name: 需求7-模组导入
 source_contents:
   - "docs/项目文档 OUTDATE.md"
   - "用户讨论确认 (2026-06-08)"
+  - "wiki/plan/req7.md"
+  - "src/components/ModulePanel.tsx"
+  - "src/components/ModulePanel.css"
+  - "src/components/Dialog.tsx"
+  - "src/components/Dialog.css"
 dependencies:
   - "wiki/abstract/overview.md"
   - "wiki/abstract/req1.md"
   - "wiki/abstract/req3.md"
+  - "wiki/abstract/code/code-data-store.md"
+  - "wiki/abstract/code/code-ui-components.md"
 created_at: 2026-06-08
-updated_at: 2026-06-08
+updated_at: 2026-06-09
 ---
 # 摘要：需求7 —— 模组导入
 
@@ -26,6 +33,8 @@ updated_at: 2026-06-08
 ## 内容概述
 
 该需求定义模组的导入与管理方式。用户通过文件上传或文本框粘贴将模组内容（Markdown/纯文本）导入系统，导入后可查看和编辑。模组内容会被注入到 AI 主持人的系统提示词中，为 AI 提供故事背景和规则参考。模组内容为自由文本，系统不对其做结构化解析。
+
+已实现：ModulePanel 重写（textarea + toolbar + 元信息行）、自定义 Dialog 弹窗（替换/追加/取消三按钮）、FileReader 文件导入、清空确认、追加分隔符 `\n\n---\n\n`。
 
 ## 依赖与影响链
 

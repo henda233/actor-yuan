@@ -1,7 +1,7 @@
 ---
 abstract_name: 项目总览
 source_contents:
-  - "docs/项目文档.md"
+  - "docs/项目文档 OUTDATE.md"
 dependencies: []
 created_at: 2026-06-08
 updated_at: 2026-06-08

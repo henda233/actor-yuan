@@ -77,7 +77,7 @@ export default function SettingsPanel() {
     setBillingPrices(prices);
   }, [model, inputPrice, outputPrice]);
 
-  const handleTestConnection = async () => {
+  const handleTestConnection = useCallback(async () => {
     setTestStatus('testing');
     setTestMessage('');
     try {
@@ -93,7 +93,7 @@ export default function SettingsPanel() {
       setTestStatus('error');
       setTestMessage(e instanceof Error ? e.message : '连接失败');
     }
-  };
+  }, [provider, apiKey, apiBaseUrl, model]);
 
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

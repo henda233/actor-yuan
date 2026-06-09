@@ -44,7 +44,7 @@ export default function MessageBubble({
     if (isEditing) {
       setEditContent(message.content);
     }
-  }, [isEditing]);
+  }, [isEditing, message.content]);
 
   const bubbleClass = [
     'msg-bubble',

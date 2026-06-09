@@ -1,11 +1,23 @@
 .module-panel {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.module-placeholder {
+.module-toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+.module-textarea {
+  resize: vertical;
+  min-height: 240px;
+}
+
+.module-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12px;
   color: var(--text-secondary);
-  font-size: 14px;
 }

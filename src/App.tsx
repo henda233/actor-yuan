@@ -22,6 +22,7 @@ import './components/ModulePanel.css';
 import './components/BillingCorner.css';
 import './components/WelcomeScreen.css';
 import './components/DebugPanel.css';
+import './components/Dialog.css';
 import './App.css';
 
 function isConfigured(): boolean {

@@ -3,6 +3,16 @@ abstract_name: 需求5-AI主持人双输出模式
 source_contents:
   - "docs/项目文档 OUTDATE.md"
   - "wiki/plan/req5.md"
+  - "src/types/storage.ts"
+  - "src/services/configStorage.ts"
+  - "src/services/dataStore.tsx"
+  - "src/hooks/useConversation.ts"
+  - "src/components/MessageBubble.tsx"
+  - "src/components/MessageBubble.css"
+  - "src/components/MessageList.tsx"
+  - "src/components/ChatInput.tsx"
+  - "src/components/ChatInput.css"
+  - "src/App.tsx"
 dependencies:
   - "wiki/abstract/overview.md"
   - "wiki/abstract/req2.md"
