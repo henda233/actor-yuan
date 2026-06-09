@@ -1,3 +1,44 @@
+.msg-bubble-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+}
+
+.msg-user-wrapper {
+  align-self: flex-start;
+}
+
+.msg-ai-wrapper {
+  align-self: flex-end;
+}
+
+.msg-draft-wrapper {
+  max-width: 98%;
+  width: 100%;
+}
+
+.msg-copy-btn {
+  margin-top: 4px;
+  padding: 2px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.msg-copy-btn:hover {
+  color: var(--primary);
+  background: var(--gray-bg);
+}
+
+.msg-copy-btn.msg-copied {
+  color: var(--blue);
+  cursor: default;
+}
+
 .msg-list {
   flex: 1;
   overflow-y: auto;
@@ -14,24 +55,20 @@
 }
 
 .msg-bubble {
-  max-width: 85%;
   padding: 12px 16px;
   border-radius: 10px;
   border: 1px solid var(--border);
 }
 
 .msg-bubble.msg-draft {
-  max-width: 98%;
   width: 100%;
 }
 
 .msg-user {
-  align-self: flex-start;
   background: var(--gray-bg);
 }
 
 .msg-ai {
-  align-self: flex-end;
   background: var(--blue-light);
 }
 

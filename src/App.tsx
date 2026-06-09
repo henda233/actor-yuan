@@ -13,6 +13,7 @@ import SettingsPanel from './components/SettingsPanel';
 import ModulePanel from './components/ModulePanel';
 import BillingCorner from './components/BillingCorner';
 import DebugPanel from './components/DebugPanel';
+import DataEditorPanel from './components/DataEditorPanel';
 import './components/TopBar.css';
 import './components/MessageBubble.css';
 import './components/ChatInput.css';
@@ -22,6 +23,7 @@ import './components/ModulePanel.css';
 import './components/BillingCorner.css';
 import './components/WelcomeScreen.css';
 import './components/DebugPanel.css';
+import './components/DataEditorPanel.css';
 import './components/Dialog.css';
 import './App.css';
 
@@ -64,6 +66,7 @@ function App() {
 
   const [panelOpen, setPanelOpen] = useState(false);
   const [debugPanelOpen, setDebugPanelOpen] = useState(false);
+  const [dataPanelOpen, setDataPanelOpen] = useState(false);
   const [configured, setConfigured] = useState(isConfigured);
   const [debugMode, setDebugModeState] = useState(getDebugMode);
 
@@ -96,6 +99,8 @@ function App() {
         debugMode={debugMode}
         debugPanelOpen={debugPanelOpen}
         onToggleDebugPanel={() => setDebugPanelOpen(prev => !prev)}
+        dataPanelOpen={dataPanelOpen}
+        onToggleDataPanel={() => setDataPanelOpen(prev => !prev)}
       />
       <div className="app-main">
         <div className="chat-area">
@@ -138,6 +143,10 @@ function App() {
         open={debugPanelOpen}
         debugEntries={debugEntries}
         onClose={() => setDebugPanelOpen(false)}
+      />
+      <DataEditorPanel
+        open={dataPanelOpen}
+        onClose={() => setDataPanelOpen(false)}
       />
     </div>
   );

@@ -12,6 +12,9 @@ interface DataStoreContextValue {
   deleteMessage: (id: string) => void;
   setModule: (text: string) => void;
   appendContextHistory: (text: string) => void;
+  setContextHistory: (text: string) => void;
+  setContextHistoryEntry: (index: number, text: string) => void;
+  deleteContextHistoryEntry: (index: number) => void;
   resetMessages: (messages: Message[]) => void;
   addSessionBilling: (billing: MessageBilling) => void;
   resetBilling: () => void;
@@ -139,6 +142,31 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
     setDirty(true);
   }, []);
 
+  const setContextHistory = useCallback((text: string) => {
+    setData((prev) => ({ ...prev, contextHistory: text }));
+    setDirty(true);
+  }, []);
+
+  const setContextHistoryEntry = useCallback((index: number, text: string) => {
+    setData((prev) => {
+      const entries = prev.contextHistory ? prev.contextHistory.split('\n\n') : [];
+      if (index < 0 || index >= entries.length) return prev;
+      entries[index] = text;
+      return { ...prev, contextHistory: entries.join('\n\n') };
+    });
+    setDirty(true);
+  }, []);
+
+  const deleteContextHistoryEntry = useCallback((index: number) => {
+    setData((prev) => {
+      const entries = prev.contextHistory ? prev.contextHistory.split('\n\n') : [];
+      if (index < 0 || index >= entries.length) return prev;
+      entries.splice(index, 1);
+      return { ...prev, contextHistory: entries.join('\n\n') };
+    });
+    setDirty(true);
+  }, []);
+
   const appendContextHistory = useCallback((text: string) => {
     setData((prev) => ({
       ...prev,
@@ -174,7 +202,7 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
 
   return (
     <DataStoreContext.Provider
-      value={{ data, dirty, exportData, importData, addMessage, updateMessage, deleteMessage, setModule, appendContextHistory, resetMessages, addSessionBilling, resetBilling }}
+      value={{ data, dirty, exportData, importData, addMessage, updateMessage, deleteMessage, setModule, setContextHistory, appendContextHistory, setContextHistoryEntry, deleteContextHistoryEntry, resetMessages, addSessionBilling, resetBilling }}
     >
       {children}
     </DataStoreContext.Provider>

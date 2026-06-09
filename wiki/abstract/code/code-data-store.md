@@ -47,6 +47,9 @@ updated_at: 2026-06-09
 | `resetMessages` | `(messages: Message[]) => void` | 替换消息列表 |
 | `addSessionBilling` | `(billing: MessageBilling) => void` | 累加单次计费到会话累计 |
 | `resetBilling` | `() => void` | 重置会话用量归零 |
+| `setContextHistory` | `(text: string) => void` | 直接设置 contextHistory 整个字符串 |
+| `setContextHistoryEntry` | `(index: number, text: string) => void` | 按索引更新 contextHistory 某一条目（`\n\n` 拆分） |
+| `deleteContextHistoryEntry` | `(index: number) => void` | 按索引删除 contextHistory 某一条目 |
 
 ### 数据流向
 

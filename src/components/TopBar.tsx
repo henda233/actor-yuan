@@ -4,6 +4,8 @@ interface TopBarProps {
   debugMode: boolean;
   debugPanelOpen: boolean;
   onToggleDebugPanel: () => void;
+  dataPanelOpen: boolean;
+  onToggleDataPanel: () => void;
 }
 
 export default function TopBar({
@@ -12,11 +14,21 @@ export default function TopBar({
   debugMode,
   debugPanelOpen,
   onToggleDebugPanel,
+  dataPanelOpen,
+  onToggleDataPanel,
 }: TopBarProps) {
   return (
     <header className="topbar">
       <h1 className="topbar-title">ActorYuan</h1>
       <div className="topbar-actions">
+        <button
+          type="button"
+          className={`topbar-toggle ${dataPanelOpen ? 'topbar-data-active' : ''}`}
+          onClick={onToggleDataPanel}
+          title={dataPanelOpen ? '关闭数据编辑' : '打开数据编辑'}
+        >
+          <span className="topbar-toggle-text">数据编辑</span>
+        </button>
         {debugMode && (
           <button
             type="button"

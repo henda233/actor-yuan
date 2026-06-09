@@ -1,6 +1,6 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-09
+> 🔄 最后同步：2026-06-09 16:00
 
 ## 模块总览
 
@@ -23,9 +23,10 @@
 | `code-providers` | [🔗](./abstract/code/code-providers.md) | OpenAI 兼容 / Anthropic / Mock 三种 Provider 实现 | ✅ | 06-08 |
 | `code-hooks` | [🔗](./abstract/code/code-hooks.md) | useConversation（双调用合并计费/makeBilling）、useExitWarning、Req2Test 面板 | ✅ | 06-09 |
 | `code-billing-service` | [🔗](./abstract/code/code-billing-service.md) | 计费工具函数：calculateCost、formatTokens、formatCost | ✅ | 06-09 |
-| `code-ui-components` | [🔗](./abstract/code/code-ui-components.md) | 11 个 UI 组件：TopBar/MessageList/MessageBubble/ChatInput/RightPanel/SettingsPanel/ModulePanel/BillingCorner/WelcomeScreen/DebugPanel/Dialog | ✅ | 06-09 |
+| `code-ui-components` | [🔗](./abstract/code/code-ui-components.md) | 12 个 UI 组件：TopBar/MessageList/MessageBubble/ChatInput/RightPanel/SettingsPanel/ModulePanel/BillingCorner/WelcomeScreen/DebugPanel/Dialog/DataEditorPanel | ✅ | 06-09 |
 | `项目功能文档` | [🔗](./abstract/doc-features.md) | 面向用户的功能说明：概述、架构、6 个已实现功能、2 个规划中功能、运行构建 | ✅ | 06-08 |
 | `修复测试问题` | [🔗](./abstract/fix-issues.md) | 数据模型扩展（contextHistory/resetMessages）、phase同步修复、单轮对话重构、草稿编辑状态机、模组注入system prompt | ✅ 已交付 | 06-09 |
+| `需求1435-数据编辑与复制` | [🔗](./abstract/req_1435.md) | 新增DataEditorPanel（遮罩面板编辑module/contextHistory/messages）+ MessageBubble复制按钮（保留Markdown） | ✅ 已交付 | 06-09 |
 
 ## 计划状态
 
@@ -39,10 +40,10 @@
 | `修复测试问题` | [plan/fix-issues.md](./plan/fix-issues.md) | 9 | completed |
 | `需求7-模组导入` | [plan/req7.md](./plan/req7.md) | 7 | completed |
 | `需求6-API计费` | [plan/req6.md](./plan/req6.md) | 9 | completed |
+| `需求1435-数据编辑与复制` | [plan/req_1435.md](./plan/req_1435.md) | 6 | completed |
 
 ## TODO列表
 
-- [x] 执行需求6计划
 
 ## 笔记
 
@@ -70,6 +71,9 @@
 
 ## 全局更新日志
 
+- `06-09 16:15`: **需求1435 修订**：contextHistory 改为单个 textarea 整体编辑（不再 `\n\n` 拆分），面板扩至 80vw，dataStore 新增 `setContextHistory` 方法。`npx tsc --noEmit` 零错误
+- `06-09 16:00`: **需求1435 全部交付（S1-S6）**：dataStore 新增 setContextHistoryEntry/deleteContextHistoryEntry；MessageBubble 包裹 wrapper + 复制按钮（1.5s "✓ 已复制"）；DataEditorPanel（560px、三区域 module/contextHistory/messages、美化 textarea、z-index:99）；TopBar "数据编辑" 按钮（始终可见）；App.tsx 集成。`npx tsc --noEmit` 零错误
+- `06-09 15:30`: **需求1435 计划制定**：对齐确认数据编辑面板（遮罩面板、实时编辑 module/contextHistory/messages 的 content）+ 复制按钮（气泡下方、保留 Markdown、"✓ 已复制" 反馈）。制定 6 步骤计划，新增 `wiki/request/req_1435.md`、`wiki/plan/req_1435.md`、`wiki/abstract/req_1435.md`，更新 index
 - `06-09`: **需求6 全部交付（S1-S9）**：新增 MessageBilling/SessionBilling 类型、billingEnabled 开关（默认开启）、billingService 工具函数、dataStore 计费方法、useConversation 全路径 usage 捕获合并、BillingCorner 重写、MessageBubble 计费行、SettingsPanel 开关+重置。`npx tsc --noEmit` 零错误
 - `06-09`: **需求6 计划修订**：新增 `billingEnabled` 计费开关（默认开启、存 localStorage、不随 JSON 导出导入）；关闭时 tokens 统计常开仅隐藏 ¥。计划步骤 8→9。更新 plan/req6.md、abstract/req6.md、request/req6.md、index.md
 - `06-09`: **需求6 计划制定**：对齐确认 11 项细节（每百万token/￥、双调用合并、JSON持久化、快照定价、缩略格式等），制定 8 步骤执行计划。新增 `wiki/request/req6.md`、`wiki/plan/req6.md`，更新摘要与 index

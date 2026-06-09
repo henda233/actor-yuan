@@ -41,6 +41,7 @@ export default function MessageBubble({
   const isReviewing = isDraft && phase === 'reviewing_draft';
   const [reasoningOpen, setReasoningOpen] = useState(false);
   const [editContent, setEditContent] = useState(message.content);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (isEditing) {
@@ -58,7 +59,24 @@ export default function MessageBubble({
     ? 'AI 正在推演剧情思路...'
     : 'AI 正在输出游戏情节...';
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard API may be unavailable
+    }
+  };
+
+  const wrapperClass = [
+    'msg-bubble-wrapper',
+    isUser ? 'msg-user-wrapper' : 'msg-ai-wrapper',
+    isDraft ? 'msg-draft-wrapper' : '',
+  ].filter(Boolean).join(' ');
+
   return (
+    <div className={wrapperClass}>
     <div className={bubbleClass}>
       <div className="msg-header">
         <span className="msg-role">{isUser ? '我' : 'AI 主持人'}</span>
@@ -160,6 +178,14 @@ export default function MessageBubble({
           )}
         </>
       )}
+    </div>
+      <button
+        type="button"
+        className={`msg-copy-btn${copied ? ' msg-copied' : ''}`}
+        onClick={handleCopy}
+      >
+        {copied ? '✓ 已复制' : '复制'}
+      </button>
     </div>
   );
 }

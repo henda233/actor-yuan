@@ -15,6 +15,7 @@ source_contents:
   - "src/components/WelcomeScreen.tsx"
   - "src/components/DebugPanel.tsx"
   - "src/components/Dialog.tsx"
+  - "src/components/DataEditorPanel.tsx"
 dependencies:
   - "src/types/storage.ts"
   - "src/services/configStorage.ts"
@@ -58,6 +59,7 @@ updated_at: 2026-06-09
 | `WelcomeScreen` | `WelcomeScreen.tsx` | 居中引导卡片 |
 | `DebugPanel` | `DebugPanel.tsx` | 右侧遮罩面板，双阶段 AI 输入展示（系统提示词 + 可折叠消息列表） |
 | `Dialog` | `Dialog.tsx` | 通用弹窗：遮罩+居中卡片，多按钮配置，风格统一 |
+| `DataEditorPanel` | `DataEditorPanel.tsx` | 数据编辑遮罩面板（z-index:99）：module/contextHistory/messages 三区域，textarea 实时编辑 |
 
 ### App.tsx 状态管理
 
