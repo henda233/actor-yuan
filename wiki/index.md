@@ -1,6 +1,6 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-09 16:00
+> 🔄 最后同步：2026-06-09 17:30
 
 ## 模块总览
 
@@ -28,6 +28,7 @@
 | `修复测试问题` | [🔗](./abstract/fix-issues.md) | 数据模型扩展（contextHistory/resetMessages）、phase同步修复、单轮对话重构、草稿编辑状态机、模组注入system prompt | ✅ 已交付 | 06-09 |
 | `需求1435-数据编辑与复制` | [🔗](./abstract/req_1435.md) | 新增DataEditorPanel（遮罩面板编辑module/contextHistory/messages）+ MessageBubble复制按钮（保留Markdown） | ✅ 已交付 | 06-09 |
 | `UI/UX优化` | [🔗](./abstract/ui-ux-optimization.md) | 修复 --primary CSS bug + 消息对齐 + BillingCorner位置 + ChatInput/设置折叠/条件挂载（S5滚动按钮/S8宽度统一已跳过） | ✅ 已交付 | 06-09 |
+| `部署文档` | [🔗](./abstract/deploy-doc.md) | Ubuntu 22.04 + Nginx 部署教程：裸机安装到验证、SPA fallback、Gzip、ufw | ✅ | 06-09 |
 
 ## 计划状态
 
@@ -73,6 +74,7 @@
 
 ## 全局更新日志
 
+- `06-09 17:30`: **部署文档**：编写 `docs/部署文档.md`（Ubuntu 22.04 + Nginx 部署教程），新增 `wiki/abstract/deploy-doc.md`，更新 index
 - `06-09 17:00`: **UI/UX优化 全部交付（S5/S8跳过）**：S1 `--primary: var(--blue)` 补充 → S2 消息对齐交换 → S3 BillingCorner top:52px → S4 ChatInput rows=3+resize+max-height:50vh → S6 设置面板三组 details 折叠 → S7 右侧面板条件挂载+移除 dead CSS。`npx tsc --noEmit` 零错误
 - `06-09 16:15`: **需求1435 修订**：contextHistory 改为单个 textarea 整体编辑（不再 `\n\n` 拆分），面板扩至 80vw，dataStore 新增 `setContextHistory` 方法。`npx tsc --noEmit` 零错误
 - `06-09 16:00`: **需求1435 全部交付（S1-S6）**：dataStore 新增 setContextHistoryEntry/deleteContextHistoryEntry；MessageBubble 包裹 wrapper + 复制按钮（1.5s "✓ 已复制"）；DataEditorPanel（560px、三区域 module/contextHistory/messages、美化 textarea、z-index:99）；TopBar "数据编辑" 按钮（始终可见）；App.tsx 集成。`npx tsc --noEmit` 零错误

@@ -95,7 +95,7 @@ function testS4AddMsg(
 }
 
 function testS4Update(
-  addMessage: ReturnType<typeof useDataStore>['addMessage'],
+  _: ReturnType<typeof useDataStore>['addMessage'],
   updateMessage: ReturnType<typeof useDataStore>['updateMessage'],
   addResult: (id: string, label: string, ok: boolean, detail?: string) => void,
 ) {
