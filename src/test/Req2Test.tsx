@@ -40,7 +40,7 @@ export default function Req2Test() {
         <Button onClick={() => testS4AddMsg(addMessage, addResult)} label="S4: addMessage(status)" />
         <Button onClick={() => testS4Update(addMessage, updateMessage, addResult)} label="S4: updateMessage" />
         <Button onClick={() => testS5Send(convRef, dataRef, addResult)} label="S5: sendMessage" />
-        <Button onClick={() => testS5Insert(convRef, dataRef, addResult)} label="S5: insertIntoDraft" />
+        <Button onClick={() => testS5EditSave(convRef, dataRef, addResult)} label="S5: saveEditedDraft" />
         <Button onClick={() => testS5Confirm(convRef, dataRef, addResult)} label="S5: confirmDraft" />
         <Button onClick={() => testS5Guard(convRef, addResult)} label="S5: 防重复发送" />
         <Button onClick={() => testS5PhaseRestore(data, addResult)} label="S5: phase恢复" />
@@ -134,28 +134,33 @@ function testS5Send(
   });
 }
 
-function testS5Insert(
+function testS5EditSave(
   convRef: React.MutableRefObject<ReturnType<typeof useConversation>>,
   dataRef: React.MutableRefObject<{ messages: Message[] }>,
   addResult: (id: string, label: string, ok: boolean, detail?: string) => void,
 ) {
   const conv = convRef.current;
   if (conv.phase !== 'reviewing_draft' || !conv.draftMessage) {
-    addResult('S5-2', 'S5: insertIntoDraft → 跳过（无draft）', false, `phase=${conv.phase}，请先执行 sendMessage`);
+    addResult('S5-2', 'S5: saveEditedDraft → 跳过（无draft）', false, `phase=${conv.phase}，请先执行 sendMessage`);
     return;
   }
   const before = conv.draftMessage.content;
-  conv.insertIntoDraft(0, '[检定：D20=18，成功] ');
+  conv.startEditingDraft();
   setTimeout(() => {
-    const latestData = dataRef.current;
-    const draft = latestData.messages.find((m) => m.status === 'draft');
-    const ok = draft?.content.startsWith('[检定');
-    addResult(
-      'S5-2',
-      'S5: insertIntoDraft(0, ...)',
-      ok,
-      `插入前: ${before.slice(0, 30)}...\n插入后: ${draft?.content.slice(0, 40)}...`,
-    );
+    const edited = `[检定：D20=18，成功] ${before}`;
+    convRef.current.saveEditedDraft(edited).then(() => {
+      const latestData = dataRef.current;
+      const draft = latestData.messages.find((m) => m.status === 'draft');
+      const ok = draft != null;
+      addResult(
+        'S5-2',
+        'S5: saveEditedDraft',
+        ok,
+        `编辑前: ${before.slice(0, 30)}...\n编辑后: ${draft?.content.slice(0, 40)}...`,
+      );
+    }).catch((e) => {
+      addResult('S5-2', 'S5: saveEditedDraft → 异常', false, String(e));
+    });
   }, 100);
 }
 

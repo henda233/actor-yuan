@@ -8,7 +8,6 @@ import TopBar from './components/TopBar';
 import WelcomeScreen from './components/WelcomeScreen';
 import MessageList from './components/MessageList';
 import ChatInput from './components/ChatInput';
-import ConfirmDraftBar from './components/ConfirmDraftBar';
 import RightPanel from './components/RightPanel';
 import SettingsPanel from './components/SettingsPanel';
 import ModulePanel from './components/ModulePanel';
@@ -17,7 +16,6 @@ import DebugPanel from './components/DebugPanel';
 import './components/TopBar.css';
 import './components/MessageBubble.css';
 import './components/ChatInput.css';
-import './components/ConfirmDraftBar.css';
 import './components/RightPanel.css';
 import './components/SettingsPanel.css';
 import './components/ModulePanel.css';
@@ -50,16 +48,17 @@ function App() {
     loading,
     loadingStage,
     error,
-    draftMessage,
     pendingReasoning,
     debugEntries,
     sendMessage,
     retryNarrative,
     cancelPendingReasoning,
-    setDraftContent,
     discardDraft,
     regenerateDraft,
     confirmDraft,
+    startEditingDraft,
+    cancelEditingDraft,
+    saveEditedDraft,
   } = conv;
 
   const [panelOpen, setPanelOpen] = useState(false);
@@ -105,10 +104,18 @@ function App() {
             <>
               <MessageList
                 messages={messages}
-                onDraftContentChange={setDraftContent}
+                phase={phase}
+                loading={loading}
+                loadingStage={loadingStage}
+                onRegenerate={regenerateDraft}
+                onDiscard={discardDraft}
+                onStartEdit={startEditingDraft}
+                onConfirm={confirmDraft}
+                onSaveEdit={saveEditedDraft}
+                onCancelEdit={cancelEditingDraft}
               />
               {error && <div className="chat-error">{error}</div>}
-              {phase === 'chatting' ? (
+              {phase === 'chatting' && (
                 <ChatInput
                   loading={loading}
                   loadingStage={loadingStage}
@@ -116,14 +123,6 @@ function App() {
                   onSend={sendMessage}
                   onRetryNarrative={retryNarrative}
                   onCancelPending={cancelPendingReasoning}
-                />
-              ) : (
-                <ConfirmDraftBar
-                  loading={loading}
-                  loadingStage={loadingStage}
-                  onConfirm={confirmDraft}
-                  onDiscard={discardDraft}
-                  onRegenerate={regenerateDraft}
                 />
               )}
             </>

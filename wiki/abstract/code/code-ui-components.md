@@ -8,7 +8,6 @@ source_contents:
   - "src/components/MessageList.tsx"
   - "src/components/MessageBubble.tsx"
   - "src/components/ChatInput.tsx"
-  - "src/components/ConfirmDraftBar.tsx"
   - "src/components/RightPanel.tsx"
   - "src/components/SettingsPanel.tsx"
   - "src/components/ModulePanel.tsx"
@@ -22,17 +21,17 @@ dependencies:
   - "src/services/aiService.ts"
   - "src/hooks/useConversation.ts"
 created_at: 2026-06-08 23:00
-updated_at: 2026-06-08
+updated_at: 2026-06-09
 ---
 # 摘要：UI 组件层（src/components/*）
 
 ## 核心结论与关键信息
 
 - **色彩方案**：白蓝黑主题，CSS 变量定义在 `src/index.css`
-- **布局**：TopBar + MainContent（flex row：ChatArea + RightPanel）+ BillingCorner（fixed 右下）+ DebugPanel（overlay 遮罩）
+- **布局**：TopBar + MainContent（flex row：ChatArea + RightPanel）+ BillingCorner（fixed 顶部居中）+ DebugPanel（overlay 遮罩）
 - **无第三方 UI 库**：全部手写 CSS
 - **WelcomeScreen**：Provider 为 mock 且无 API Key → 显示引导页
-- **草稿编辑**：需求5起改为 textarea 自由编辑整个草稿（替代原右键段落插入）
+- **草稿交互**：需求5起改为 textarea 自由编辑；需求修复后改为 viewing（段落 + 4 按钮）↔ editing（textarea + 保存/取消）状态机，ConfirmDraftBar 已移除
 - **推演方案折叠**：MessageBubble 中 `<details>` 默认折叠显示 reasoning
 - **Debug 模式**：SettingsPanel 开关 → TopBar 显示 Debug 按钮 → DebugPanel 右侧遮罩面板，展示双阶段 AI 输入（系统提示词 + 消息列表）
 
@@ -44,13 +43,12 @@ updated_at: 2026-06-08
 |---|---|---|
 | `TopBar` | `TopBar.tsx` | 应用标题 + Debug 按钮(debugMode 时) + 右侧面板切换按钮 |
 | `MessageList` | `MessageList.tsx` | 消息列表渲染，自动滚到底部，过滤 system 消息 |
-| `MessageBubble` | `MessageBubble.tsx` | 消息气泡；草稿 → textarea 自由编辑 + reasoning `<details>` 折叠区块 |
+| `MessageBubble` | `MessageBubble.tsx` | 消息气泡；draft viewing（段落 + 重新生成/放弃/编辑/确认 4 按钮）↔ editing（textarea + 保存/取消）状态机 |
 | `ChatInput` | `ChatInput.tsx` | 输入框 + 发送按钮；分阶段 loading 文案；pendingReasoning 重试/取消 UI |
-| `ConfirmDraftBar` | `ConfirmDraftBar.tsx` | 草稿确认栏：放弃 / 重新生成 / 确认；loading 分阶段显示 |
 | `RightPanel` | `RightPanel.tsx` | 面板外壳 + Tab 切换（设置/模组） |
 | `SettingsPanel` | `SettingsPanel.tsx` | Provider/API Key/Base URL/Model/测试连接/计费价格/系统提示词/Debug 开关/导入导出 |
 | `ModulePanel` | `ModulePanel.tsx` | 模组管理占位 |
-| `BillingCorner` | `BillingCorner.tsx` | fixed 右下会话用量显示 |
+| `BillingCorner` | `BillingCorner.tsx` | fixed 顶部居中会话用量显示 |
 | `WelcomeScreen` | `WelcomeScreen.tsx` | 居中引导卡片 |
 | `DebugPanel` | `DebugPanel.tsx` | 右侧遮罩面板，双阶段 AI 输入展示（系统提示词 + 可折叠消息列表） |
 

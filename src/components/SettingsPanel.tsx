@@ -8,7 +8,9 @@ import {
   getBillingPrices, setBillingPrices,
   getSystemPrompt, setSystemPrompt,
   getDebugMode, setDebugMode,
+  getDraftEditRewriteMode, setDraftEditRewriteMode,
 } from '../services/configStorage';
+import type { DraftEditRewriteMode } from '../services/configStorage';
 import { createAIService } from '../services/aiService';
 import { useDataStore } from '../services/dataStore';
 
@@ -27,6 +29,7 @@ export default function SettingsPanel() {
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [testMessage, setTestMessage] = useState('');
   const [debugMode, setDebugModeState] = useState(getDebugMode);
+  const [draftEditRewriteMode, setDraftEditRewriteModeState] = useState<DraftEditRewriteMode>(getDraftEditRewriteMode);
 
   useEffect(() => {
     const prices = getBillingPrices();
@@ -229,6 +232,25 @@ export default function SettingsPanel() {
           />
           <span>启用 Debug 面板</span>
         </label>
+      </div>
+
+      <div className="setting-divider" />
+
+      <div className="setting-group">
+        <label className="setting-label">草稿编辑重写模式</label>
+        <span className="setting-hint">编辑草稿保存后 AI 重写的行为：仅重写情节（保留推演方案）或完全重新生成</span>
+        <select
+          className="setting-select"
+          value={draftEditRewriteMode}
+          onChange={(e) => {
+            const v = e.target.value as DraftEditRewriteMode;
+            setDraftEditRewriteModeState(v);
+            setDraftEditRewriteMode(v);
+          }}
+        >
+          <option value="narrative-only">仅重写情节（保留推演方案）</option>
+          <option value="full">完全重新生成</option>
+        </select>
       </div>
 
       <div className="setting-divider" />

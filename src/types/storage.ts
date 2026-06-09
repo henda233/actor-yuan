@@ -15,15 +15,17 @@ export interface BillingPrice {
 export type BillingPrices = Record<string, BillingPrice>;
 
 export interface ExportData {
-  version: 1;
+  version: 2;
   exportedAt: string;
   module: string;
   messages: Message[];
+  contextHistory: string;
 }
 
 export interface AppData {
   module: string;
   messages: Message[];
+  contextHistory: string;
 }
 
 export type ProviderType = 'openai' | 'anthropic' | 'mock';

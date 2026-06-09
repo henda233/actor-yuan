@@ -1,13 +1,33 @@
 import { useEffect, useRef } from 'react';
 import type { Message } from '../types/storage';
+import type { Phase, LoadingStage } from '../hooks/useConversation';
 import MessageBubble from './MessageBubble';
 
 interface MessageListProps {
   messages: Message[];
-  onDraftContentChange?: (content: string) => void;
+  phase: Phase;
+  loading: boolean;
+  loadingStage: LoadingStage;
+  onRegenerate: () => void;
+  onDiscard: () => void;
+  onStartEdit: () => void;
+  onConfirm: () => void;
+  onSaveEdit: (content: string) => void;
+  onCancelEdit: () => void;
 }
 
-export default function MessageList({ messages, onDraftContentChange }: MessageListProps) {
+export default function MessageList({
+  messages,
+  phase,
+  loading,
+  loadingStage,
+  onRegenerate,
+  onDiscard,
+  onStartEdit,
+  onConfirm,
+  onSaveEdit,
+  onCancelEdit,
+}: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,9 +45,15 @@ export default function MessageList({ messages, onDraftContentChange }: MessageL
           <MessageBubble
             key={m.id}
             message={m}
-            onDraftContentChange={
-              m.status === 'draft' ? onDraftContentChange : undefined
-            }
+            phase={phase}
+            loading={loading}
+            loadingStage={loadingStage}
+            onRegenerate={onRegenerate}
+            onDiscard={onDiscard}
+            onStartEdit={onStartEdit}
+            onConfirm={onConfirm}
+            onSaveEdit={onSaveEdit}
+            onCancelEdit={onCancelEdit}
           />
         ))}
       <div ref={bottomRef} />

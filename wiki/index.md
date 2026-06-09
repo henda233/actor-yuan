@@ -1,6 +1,6 @@
 # WIKI Index（全局摘要索引）
 
-> 🔄 最后同步：2026-06-08 23:59
+> 🔄 最后同步：2026-06-09
 
 ## 模块总览
 
@@ -22,7 +22,9 @@
 | `code-ai-service` | [🔗](./abstract/code/code-ai-service.md) | AIService 接口、工厂函数、4 类错误体系 | ✅ | 06-08 |
 | `code-providers` | [🔗](./abstract/code/code-providers.md) | OpenAI 兼容 / Anthropic / Mock 三种 Provider 实现 | ✅ | 06-08 |
 | `code-hooks` | [🔗](./abstract/code/code-hooks.md) | useConversation（含 discardDraft/regenerateDraft）、useExitWarning、Req2Test 面板 | ✅ | 06-08 |
-| `code-ui-components` | [🔗](./abstract/code/code-ui-components.md) | 13 个 UI 组件：TopBar/MessageList/MessageBubble/ChatInput/ConfirmDraftBar/DraftContextMenu/InsertDialog/RightPanel/SettingsPanel/ModulePanel/BillingCorner/WelcomeScreen | ✅ | 06-08 |
+| `code-ui-components` | [🔗](./abstract/code/code-ui-components.md) | 11 个 UI 组件：TopBar/MessageList/MessageBubble/ChatInput/ConfirmDraftBar/RightPanel/SettingsPanel/ModulePanel/BillingCorner/WelcomeScreen/DebugPanel | ✅ | 06-08 |
+| `项目功能文档` | [🔗](./abstract/doc-features.md) | 面向用户的项目功能说明文档：概述、架构、已实现功能（6个）、规划中功能（2个）、运行构建 | ✅ | 06-08 |
+| `修复测试问题` | [🔗](./abstract/fix-issues.md) | 4 个测试问题：草稿编辑流程重构、单轮对话架构、import 状态同步、BillingCorner 位置 | ✅ 已交付 | 06-09 |
 
 ## 计划状态
 
@@ -33,9 +35,11 @@
 | `需求3-API兼容` | [plan/req3.md](./plan/req3.md) | 9 | completed |
 | `需求4-UI设计` | [plan/req4.md](./plan/req4.md) | 11 | completed |
 | `需求5-输出模式` | [plan/req5.md](./plan/req5.md) | 11 | completed |
+| `修复测试问题` | [plan/fix-issues.md](./plan/fix-issues.md) | 9 | completed |
 
 ## TODO列表
 
+- [x] ~~执行「修复测试问题」计划~~ S1-S9 全部完成
 - [ ] 制定需求6（API计费）的执行计划
 - [ ] 制定需求7（模组导入）的执行计划
 
@@ -65,6 +69,10 @@
 
 ## 全局更新日志
 
+- `06-09`: **「修复测试问题」后半部分（S6-S9）完成**：MessageBubble viewing/editing 状态机、移除 ConfirmDraftBar、ChatInput 按 phase 显隐、BillingCorner 顶部居中、`tsc --noEmit` 零错误。计划全部交付。
+- `06-09`: **「修复测试问题」前半部分（S1-S5）完成**：数据模型扩展（contextHistory + resetMessages + 旧版导入迁移）、useEffect phase 同步修复、draftEditRewriteMode 配置、useConversation 单轮对话重构、buildSystemPrompt 模组注入。`npx tsc --noEmit` 零错误。App.tsx 已适配新 API（移除 setDraftContent），Req2Test 已更新。
+- `06-09`: 定位问题1根因（useState 初始化不响应 importData 更新→phase 未同步），与用户对齐问题3+4细节（编辑→保存→AI重写配置参数、contextHistory 增长来源、模组注入 system prompt），制定「修复测试问题」执行计划（9 步骤）并写入 `wiki/plan/fix-issues.md`，新增摘要 `wiki/abstract/fix-issues.md`，更新 index
+- `06-09 00:30`: 编写项目功能文档（`docs/项目功能文档.md`），覆盖概述/架构/6 个已实现功能/2 个规划中功能/运行构建；新增摘要 `wiki/abstract/doc-features.md`；修正 code-ui-components index 条目（移除已删除的 DraftContextMenu/InsertDialog，补充 DebugPanel）
 - `06-08 23:59`: Debug 面板功能：configStorage 新增 getDebugMode/setDebugMode、useConversation 新增 DebugEntry/DebugEntries 类型 + debugEntries 捕获、DebugPanel 组件（右侧遮罩面板，双阶段输入对比）、SettingsPanel debug 开关、TopBar debug 按钮、`npx tsc --noEmit` 零错误
 - `06-08`: 需求5 全部交付（S1-S11）：双 API 调用双输出、LoadingStage 分阶段、reasoning 折叠、textarea 编辑草稿、retryNarrative/cancelPendingReasoning、删除 DraftContextMenu/InsertDialog、dataStore 扩展 reasoning、`npx tsc --noEmit` 零错误
 - `06-08 23:59`: 需求5 执行计划制定完成（11 步骤）：双 API 调用、{stage} 提示词模板、Message.reasoning 字段、textarea 自由编辑草稿、删除 DraftContextMenu/InsertDialog
