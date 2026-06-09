@@ -32,6 +32,7 @@ const KEYS = {
   systemPrompt: 'actor-yuan:system-prompt',
   debugMode: 'actor-yuan:debug-mode',
   draftEditRewriteMode: 'actor-yuan:draft-edit-rewrite-mode',
+  billingEnabled: 'actor-yuan:billing-enabled',
 } as const;
 
 export function getProvider(): ProviderType {
@@ -106,4 +107,12 @@ export function getDraftEditRewriteMode(): DraftEditRewriteMode {
 
 export function setDraftEditRewriteMode(value: DraftEditRewriteMode): void {
   localStorage.setItem(KEYS.draftEditRewriteMode, value);
+}
+
+export function getBillingEnabled(): boolean {
+  return localStorage.getItem(KEYS.billingEnabled) !== 'false';
+}
+
+export function setBillingEnabled(value: boolean): void {
+  localStorage.setItem(KEYS.billingEnabled, String(value));
 }

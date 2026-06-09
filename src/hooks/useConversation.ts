@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useDataStore } from '../services/dataStore';
-import { buildSystemPrompt, getDebugMode, getDraftEditRewriteMode } from '../services/configStorage';
+import { buildSystemPrompt, getDebugMode, getDraftEditRewriteMode, getBillingPrices, getModel } from '../services/configStorage';
+import { calculateCost } from '../services/billingService';
 import type { AIService } from '../services/aiService';
 import {
   createMockProvider,
@@ -11,7 +12,7 @@ import {
   AINetworkError,
   AIAPIError,
 } from '../services/aiService';
-import type { Message } from '../types/storage';
+import type { Message, MessageBilling } from '../types/storage';
 
 export type Phase = 'chatting' | 'reviewing_draft' | 'editing_draft';
 export type LoadingStage = 'idle' | 'reasoning' | 'narrating';
@@ -34,6 +35,16 @@ function extractBeforeBracket(content: string): string | null {
   return content.slice(0, idx);
 }
 
+function makeBilling(inputTokens: number, outputTokens: number): MessageBilling {
+  const prices = getBillingPrices();
+  const price = prices[getModel() ?? ''] ?? { inputPrice: 0, outputPrice: 0 };
+  return {
+    inputTokens,
+    outputTokens,
+    cost: calculateCost(inputTokens, outputTokens, price.inputPrice, price.outputPrice),
+  };
+}
+
 export function useConversation(aiService?: AIService) {
   const {
     data,
@@ -42,6 +53,7 @@ export function useConversation(aiService?: AIService) {
     deleteMessage,
     appendContextHistory,
     resetMessages,
+    addSessionBilling,
   } = useDataStore();
   const service = aiService ?? createMockProvider();
 
@@ -124,7 +136,7 @@ export function useConversation(aiService?: AIService) {
           });
         }
 
-        const { content: reasoning } = await service.chat(
+        const { content: reasoning, usage: reasoningUsage } = await service.chat(
           messagesForAI,
           buildSystemPrompt('推演方案制定', data.module),
         );
@@ -144,14 +156,19 @@ export function useConversation(aiService?: AIService) {
             }));
           }
 
-          const { content: narrative, usage } = await service.chat(
+          const { content: narrative, usage: narrativeUsage } = await service.chat(
             messagesForAI,
             buildSystemPrompt('游戏情节推演', data.module, reasoning),
           );
-          console.debug('[useConversation] token usage:', usage);
-          addMessage('assistant', narrative, 'draft', reasoning);
+          const billing = makeBilling(
+            reasoningUsage.inputTokens + narrativeUsage.inputTokens,
+            reasoningUsage.outputTokens + narrativeUsage.outputTokens,
+          );
+          addMessage('assistant', narrative, 'draft', reasoning, billing);
+          addSessionBilling(billing);
           setPhase('reviewing_draft');
         } catch (e) {
+          addSessionBilling(makeBilling(reasoningUsage.inputTokens, reasoningUsage.outputTokens));
           setPendingReasoning(reasoning);
           handleError(e);
         }
@@ -161,7 +178,7 @@ export function useConversation(aiService?: AIService) {
         setLoadingStage('idle');
       }
     },
-    [phase, pendingReasoning, data.module, buildUserContent, addMessage, resetMessages, service, handleError],
+    [phase, pendingReasoning, data.module, buildUserContent, addMessage, addSessionBilling, resetMessages, service, handleError],
   );
 
   const retryNarrative = useCallback(async () => {
@@ -188,8 +205,9 @@ export function useConversation(aiService?: AIService) {
         messagesForAI,
         buildSystemPrompt('游戏情节推演', data.module, pendingReasoning),
       );
-      console.debug('[useConversation] token usage:', usage);
-      addMessage('assistant', narrative, 'draft', pendingReasoning);
+      const billing = makeBilling(usage.inputTokens, usage.outputTokens);
+      addMessage('assistant', narrative, 'draft', pendingReasoning, billing);
+      addSessionBilling(billing);
       setPendingReasoning(null);
       setPhase('reviewing_draft');
     } catch (e) {
@@ -197,7 +215,7 @@ export function useConversation(aiService?: AIService) {
     } finally {
       setLoadingStage('idle');
     }
-  }, [pendingReasoning, data.messages, data.module, addMessage, service, handleError]);
+  }, [pendingReasoning, data.messages, data.module, addMessage, addSessionBilling, service, handleError]);
 
   const cancelPendingReasoning = useCallback(() => {
     setPendingReasoning(null);
@@ -251,14 +269,15 @@ export function useConversation(aiService?: AIService) {
         messagesForAI,
         buildSystemPrompt('游戏情节推演', data.module, reasoning),
       );
-      console.debug('[useConversation] token usage:', usage);
-      addMessage('assistant', narrative, 'draft', reasoning);
+      const billing = makeBilling(usage.inputTokens, usage.outputTokens);
+      addMessage('assistant', narrative, 'draft', reasoning, billing);
+      addSessionBilling(billing);
     } catch (e) {
       handleError(e);
     } finally {
       setLoadingStage('idle');
     }
-  }, [phase, draftMessage, data.messages, data.module, deleteMessage, addMessage, service, handleError]);
+  }, [phase, draftMessage, data.messages, data.module, deleteMessage, addMessage, addSessionBilling, service, handleError]);
 
   const startEditingDraft = useCallback(() => {
     if (phase !== 'reviewing_draft' || !draftMessage) {
@@ -297,8 +316,9 @@ export function useConversation(aiService?: AIService) {
 
       try {
         const { content: narrative, usage } = await service.chat(messagesForAI, sysPrompt);
-        console.debug('[useConversation] token usage:', usage);
-        updateMessage(draftMessage.id, { content: narrative });
+        const billing = makeBilling(usage.inputTokens, usage.outputTokens);
+        updateMessage(draftMessage.id, { content: narrative, billing });
+        addSessionBilling(billing);
         setPhase('reviewing_draft');
       } catch (e) {
         handleError(e);
@@ -309,7 +329,7 @@ export function useConversation(aiService?: AIService) {
       setLoadingStage('reasoning');
 
       try {
-        const { content: reasoning } = await service.chat(
+        const { content: reasoning, usage: reasoningUsage } = await service.chat(
           messagesForAI,
           buildSystemPrompt('推演方案制定', module),
         );
@@ -320,11 +340,16 @@ export function useConversation(aiService?: AIService) {
           + `\n\n## 需要重写的草稿\n${editedContent}`;
 
         try {
-          const { content: narrative, usage } = await service.chat(messagesForAI, sysPrompt);
-          console.debug('[useConversation] token usage:', usage);
-          updateMessage(draftMessage.id, { content: narrative, reasoning });
+          const { content: narrative, usage: narrativeUsage } = await service.chat(messagesForAI, sysPrompt);
+          const billing = makeBilling(
+            reasoningUsage.inputTokens + narrativeUsage.inputTokens,
+            reasoningUsage.outputTokens + narrativeUsage.outputTokens,
+          );
+          updateMessage(draftMessage.id, { content: narrative, reasoning, billing });
+          addSessionBilling(billing);
           setPhase('reviewing_draft');
         } catch (e) {
+          addSessionBilling(makeBilling(reasoningUsage.inputTokens, reasoningUsage.outputTokens));
           setPendingReasoning(reasoning);
           handleError(e);
         }
@@ -334,7 +359,7 @@ export function useConversation(aiService?: AIService) {
         setLoadingStage('idle');
       }
     }
-  }, [phase, draftMessage, data.messages, data.module, appendContextHistory, updateMessage, service, handleError]);
+  }, [phase, draftMessage, data.messages, data.module, appendContextHistory, updateMessage, addSessionBilling, service, handleError]);
 
   const clearDebugEntries = useCallback(() => {
     setDebugEntries({});

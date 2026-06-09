@@ -12,17 +12,18 @@
 | `需求3-API兼容` | [🔗](./abstract/req3.md) | OpenAI兼容格式/Anthropic双Provider、baseUrl可配、token用量提取、testConnection、4类错误、Mock保留 | ✅ 已交付 | 06-08 |
 | `需求4-UI设计` | [🔗](./abstract/req4.md) | 蓝白黑主色调、对话+右键插入双交互模式、WelcomeScreen、设置面板、占位组件 | ✅ 已交付 | 06-08 |
 | `需求5-输出模式` | [🔗](./abstract/req5.md) | 推演方案（隐藏）+ 情节正文双输出、textarea 自由编辑草稿、双 API 调用、分阶段 loading、retryNarrative | ✅ 已交付 | 06-08 |
-| `需求6-API计费` | [🔗](./abstract/req6.md) | 按模型配置价格、token用量与费用展示、会话累计 | ⚠️ 待制定计划 | 06-08 |
+| `需求6-API计费` | [🔗](./abstract/req6.md) | 每百万token/￥、计费开关(billingEnabled默认开启)、双调用合并、消息气泡+角标展示、JSON持久化、快照定价 | ✅ 已交付 | 06-09 |
 | `需求7-模组导入` | [🔗](./abstract/req7.md) | 纯文本/Markdown模组导入、自定义Dialog替换/追加、textarea编辑、元信息展示 | ✅ 已交付 | 06-09 |
 | `Vite项目初始化` | [🔗](./abstract/init-vite.md) | Vite 8 + React 19 + TS 6 + react-router 7 项目骨架 | ✅ | 06-08 |
 | `React Router Data模式笔记` | [🔗](./abstract/react-router-data-patterns.md) | Data模式、路由结构、fetcher API调用、pending UI、纯前端适配策略 | ✅ | 06-08 |
-| `code-types` | [🔗](./abstract/code/code-types.md) | 全部共享类型定义：Message、ChatResult、ProviderType 等 | ✅ | 06-08 |
-| `code-config-storage` | [🔗](./abstract/code/code-config-storage.md) | localStorage 配置层：6 组 getter/setter、键名规范 | ✅ | 06-08 |
-| `code-data-store` | [🔗](./abstract/code/code-data-store.md) | React Context 数据层：import/export、消息 CRUD、dirty 追踪 | ✅ | 06-08 |
+| `code-types` | [🔗](./abstract/code/code-types.md) | MessageBilling/SessionBilling/Message/AppData/ExportData/ChatResult 等 | ✅ | 06-09 |
+| `code-config-storage` | [🔗](./abstract/code/code-config-storage.md) | localStorage 配置层：9 组 getter/setter（含 billingEnabled）、键名规范 | ✅ | 06-09 |
+| `code-data-store` | [🔗](./abstract/code/code-data-store.md) | React Context 数据层：import/export、消息 CRUD、addSessionBilling/resetBilling、dirty 追踪 | ✅ | 06-09 |
 | `code-ai-service` | [🔗](./abstract/code/code-ai-service.md) | AIService 接口、工厂函数、4 类错误体系 | ✅ | 06-08 |
 | `code-providers` | [🔗](./abstract/code/code-providers.md) | OpenAI 兼容 / Anthropic / Mock 三种 Provider 实现 | ✅ | 06-08 |
-| `code-hooks` | [🔗](./abstract/code/code-hooks.md) | useConversation（含 discardDraft/regenerateDraft）、useExitWarning、Req2Test 面板 | ✅ | 06-08 |
-| `code-ui-components` | [🔗](./abstract/code/code-ui-components.md) | 11 个 UI 组件：TopBar/MessageList/MessageBubble/ChatInput/ConfirmDraftBar/RightPanel/SettingsPanel/ModulePanel/BillingCorner/WelcomeScreen/DebugPanel | ✅ | 06-08 |
+| `code-hooks` | [🔗](./abstract/code/code-hooks.md) | useConversation（双调用合并计费/makeBilling）、useExitWarning、Req2Test 面板 | ✅ | 06-09 |
+| `code-billing-service` | [🔗](./abstract/code/code-billing-service.md) | 计费工具函数：calculateCost、formatTokens、formatCost | ✅ | 06-09 |
+| `code-ui-components` | [🔗](./abstract/code/code-ui-components.md) | 11 个 UI 组件：TopBar/MessageList/MessageBubble/ChatInput/RightPanel/SettingsPanel/ModulePanel/BillingCorner/WelcomeScreen/DebugPanel/Dialog | ✅ | 06-09 |
 | `项目功能文档` | [🔗](./abstract/doc-features.md) | 面向用户的功能说明：概述、架构、6 个已实现功能、2 个规划中功能、运行构建 | ✅ | 06-08 |
 | `修复测试问题` | [🔗](./abstract/fix-issues.md) | 数据模型扩展（contextHistory/resetMessages）、phase同步修复、单轮对话重构、草稿编辑状态机、模组注入system prompt | ✅ 已交付 | 06-09 |
 
@@ -37,10 +38,11 @@
 | `需求5-输出模式` | [plan/req5.md](./plan/req5.md) | 11 | completed |
 | `修复测试问题` | [plan/fix-issues.md](./plan/fix-issues.md) | 9 | completed |
 | `需求7-模组导入` | [plan/req7.md](./plan/req7.md) | 7 | completed |
+| `需求6-API计费` | [plan/req6.md](./plan/req6.md) | 9 | completed |
 
 ## TODO列表
 
-- [ ] 制定需求6（API计费）的执行计划
+- [x] 执行需求6计划
 
 ## 笔记
 
@@ -68,6 +70,9 @@
 
 ## 全局更新日志
 
+- `06-09`: **需求6 全部交付（S1-S9）**：新增 MessageBilling/SessionBilling 类型、billingEnabled 开关（默认开启）、billingService 工具函数、dataStore 计费方法、useConversation 全路径 usage 捕获合并、BillingCorner 重写、MessageBubble 计费行、SettingsPanel 开关+重置。`npx tsc --noEmit` 零错误
+- `06-09`: **需求6 计划修订**：新增 `billingEnabled` 计费开关（默认开启、存 localStorage、不随 JSON 导出导入）；关闭时 tokens 统计常开仅隐藏 ¥。计划步骤 8→9。更新 plan/req6.md、abstract/req6.md、request/req6.md、index.md
+- `06-09`: **需求6 计划制定**：对齐确认 11 项细节（每百万token/￥、双调用合并、JSON持久化、快照定价、缩略格式等），制定 8 步骤执行计划。新增 `wiki/request/req6.md`、`wiki/plan/req6.md`，更新摘要与 index
 - `06-09`: **需求7 全部交付**：ModulePanel 重写（toolbar + textarea + 元信息）、自定义 Dialog 弹窗（替换/追加/取消）、FileReader 文件导入、清空确认。新增 `Dialog.tsx`/`Dialog.css`，`npx tsc --noEmit` 零错误
 - `06-09`: **「修复测试问题」全部交付（S1-S9）**：数据模型扩展（contextHistory + resetMessages + 旧版导入迁移）、useEffect phase 同步修复、draftEditRewriteMode 配置、useConversation 单轮对话重构、buildSystemPrompt 模组注入、MessageBubble viewing/editing 状态机、移除 ConfirmDraftBar、ChatInput 按 phase 显隐、BillingCorner 顶部居中。`npx tsc --noEmit` 零错误
 - `06-09`: 定位问题1根因（useState 初始化不响应 importData 更新→phase 未同步），制定「修复测试问题」执行计划（9 步骤），新增 `wiki/abstract/fix-issues.md`

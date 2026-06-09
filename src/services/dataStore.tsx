@@ -1,21 +1,23 @@
 import { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import type { AppData, ExportData, Message } from '../types/storage';
+import type { AppData, ExportData, Message, MessageBilling, SessionBilling } from '../types/storage';
 
 interface DataStoreContextValue {
   data: AppData;
   dirty: boolean;
   exportData: () => void;
   importData: (file: File) => Promise<void>;
-  addMessage: (role: Message['role'], content: string, status?: Message['status'], reasoning?: string) => void;
-  updateMessage: (id: string, patch: Partial<Pick<Message, 'content' | 'status' | 'reasoning'>>) => void;
+  addMessage: (role: Message['role'], content: string, status?: Message['status'], reasoning?: string, billing?: MessageBilling) => void;
+  updateMessage: (id: string, patch: Partial<Pick<Message, 'content' | 'status' | 'reasoning' | 'billing'>>) => void;
   deleteMessage: (id: string) => void;
   setModule: (text: string) => void;
   appendContextHistory: (text: string) => void;
   resetMessages: (messages: Message[]) => void;
+  addSessionBilling: (billing: MessageBilling) => void;
+  resetBilling: () => void;
 }
 
-const initialData: AppData = { module: '', messages: [], contextHistory: '' };
+const initialData: AppData = { module: '', messages: [], contextHistory: '', billing: { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 } };
 
 const DataStoreContext = createContext<DataStoreContextValue | null>(null);
 
@@ -25,11 +27,12 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
 
   const exportData = useCallback(() => {
     const exportObj: ExportData = {
-      version: 2,
+      version: 3,
       exportedAt: new Date().toISOString(),
       module: data.module,
       messages: data.messages,
       contextHistory: data.contextHistory,
+      billing: data.billing,
     };
     const blob = new Blob([JSON.stringify(exportObj, null, 2)], {
       type: 'application/json',
@@ -55,6 +58,10 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
     const module = (parsed.module as string) ?? '';
     const rawMessages = (parsed.messages as Message[]) ?? [];
     let contextHistory = (parsed.contextHistory as string) ?? '';
+    const version = (parsed.version as number) ?? 1;
+    const billing: SessionBilling = version >= 3
+      ? ((parsed.billing as SessionBilling) ?? { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 })
+      : { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 };
 
     // 迁移旧版数据（version 1，无 contextHistory）
     if (!contextHistory && rawMessages.length > 0) {
@@ -85,14 +92,14 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
         migratedMessages.pop();
       }
 
-      setData({ module, messages: migratedMessages, contextHistory });
+      setData({ module, messages: migratedMessages, contextHistory, billing });
     } else {
-      setData({ module, messages: rawMessages, contextHistory });
+      setData({ module, messages: rawMessages, contextHistory, billing });
     }
     setDirty(false);
   }, []);
 
-  const addMessage = useCallback((role: Message['role'], content: string, status?: Message['status'], reasoning?: string) => {
+  const addMessage = useCallback((role: Message['role'], content: string, status?: Message['status'], reasoning?: string, billing?: MessageBilling) => {
     const msg: Message = {
       id: crypto.randomUUID(),
       role,
@@ -100,6 +107,7 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
       timestamp: Date.now(),
       status,
       reasoning,
+      billing,
     };
     setData((prev) => ({
       ...prev,
@@ -144,9 +152,29 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
     setDirty(true);
   }, []);
 
+  const addSessionBilling = useCallback((billing: MessageBilling) => {
+    setData((prev) => ({
+      ...prev,
+      billing: {
+        totalInputTokens: prev.billing.totalInputTokens + billing.inputTokens,
+        totalOutputTokens: prev.billing.totalOutputTokens + billing.outputTokens,
+        totalCost: prev.billing.totalCost + billing.cost,
+      },
+    }));
+    setDirty(true);
+  }, []);
+
+  const resetBilling = useCallback(() => {
+    setData((prev) => ({
+      ...prev,
+      billing: { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 },
+    }));
+    setDirty(true);
+  }, []);
+
   return (
     <DataStoreContext.Provider
-      value={{ data, dirty, exportData, importData, addMessage, updateMessage, deleteMessage, setModule, appendContextHistory, resetMessages }}
+      value={{ data, dirty, exportData, importData, addMessage, updateMessage, deleteMessage, setModule, appendContextHistory, resetMessages, addSessionBilling, resetBilling }}
     >
       {children}
     </DataStoreContext.Provider>

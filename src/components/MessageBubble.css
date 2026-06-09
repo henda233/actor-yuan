@@ -126,6 +126,13 @@
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
+.msg-billing {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
 .msg-draft-actions {
   display: flex;
   gap: 8px;

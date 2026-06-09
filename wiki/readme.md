@@ -31,6 +31,7 @@ wiki/
 │       ├── code-data-store.md
 │       ├── code-ai-service.md
 │       ├── code-providers.md
+│       ├── code-billing-service.md
 │       ├── code-hooks.md
 │       └── code-ui-components.md
 ├── request/               # 用户需求记录

@@ -5,7 +5,7 @@ source_contents:
 dependencies:
   - "src/types/storage.ts"
 created_at: 2026-06-08 21:00
-updated_at: 2026-06-08
+updated_at: 2026-06-09
 ---
 # 摘要：配置存储（src/services/configStorage.ts）
 
@@ -17,11 +17,12 @@ updated_at: 2026-06-08
 - `getApiBaseUrl` 默认返回 `https://api.openai.com/v1`，仅 OpenAI 兼容格式使用
 - **无 set 端校验**：校验职责在 UI 层，本模块仅负责读写，保持简单
 - `getSystemPrompt` 不存在时返回空字符串 `''`
-- `DEFAULT_SYSTEM_PROMPT` 常量含 `{stage}` 占位符，`buildSystemPrompt(stage, reasoning?)` 负责替换和追加推理内容
+- `DEFAULT_SYSTEM_PROMPT` 常量含 `{stage}` 占位符，`buildSystemPrompt(stage, module, reasoning?)` 负责替换、注入模组和追加推理内容
+- 需求6 新增 `getBillingEnabled`/`setBillingEnabled`：`billingEnabled` 默认 `true`（`getItem !== 'false'`），为用户偏好配置，不随 JSON 导出导入
 
 ## 内容概述
 
-共 8 组 getter/setter，覆盖 8 个 localStorage 键：
+共 9 组 getter/setter，覆盖 9 个 localStorage 键：
 
 | localStorage 键 | getter | setter | 类型 | 默认值 |
 |---|---|---|---|---|
@@ -32,11 +33,13 @@ updated_at: 2026-06-08
 | `actor-yuan:billing-prices` | `getBillingPrices` | `setBillingPrices` | `BillingPrices` | `{}` |
 | `actor-yuan:system-prompt` | `getSystemPrompt` | `setSystemPrompt` | `string` | `''` |
 | `actor-yuan:debug-mode` | `getDebugMode` | `setDebugMode` | `boolean` | `false` |
+| `actor-yuan:draft-edit-rewrite-mode` | `getDraftEditRewriteMode` | `setDraftEditRewriteMode` | `DraftEditRewriteMode` | `'narrative-only'` |
+| `actor-yuan:billing-enabled` | `getBillingEnabled` | `setBillingEnabled` | `boolean` | `true` |
 
-额外导出：`DEFAULT_SYSTEM_PROMPT`（常量）、`buildSystemPrompt(stage, reasoning?)`（函数）
+额外导出：`DEFAULT_SYSTEM_PROMPT`（常量）、`buildSystemPrompt(stage, module, reasoning?)`（函数）、`DraftEditRewriteMode`（类型）
 
 ## 依赖与影响链
 
 - **上游依赖**：`src/types/storage.ts`（`BillingPrices`, `ProviderType` 类型）
-- **下游被依赖**：`useConversation.ts`（读取 systemPrompt、debugMode）、`aiService.ts` 的调用方（读取 apiKey/model/provider/baseUrl）、`SettingsPanel.tsx`（全部 getter/setter）、`App.tsx`（debugMode）
+- **下游被依赖**：`useConversation.ts`（读取 systemPrompt、debugMode、billingPrices、model、billingEnabled）、`aiService.ts` 的调用方（读取 apiKey/model/provider/baseUrl）、`SettingsPanel.tsx`（全部 getter/setter）、`App.tsx`（debugMode、provider、apiKey）、`BillingCorner.tsx`（billingEnabled）、`MessageBubble.tsx`（billingEnabled）
 - **变更扩散评估**：中（新增配置项只需增加一对 getter/setter + 一个 key 常量）

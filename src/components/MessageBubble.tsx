@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { Message } from '../types/storage';
 import type { Phase, LoadingStage } from '../hooks/useConversation';
+import { getBillingEnabled } from '../services/configStorage';
+import { formatTokens, formatCost } from '../services/billingService';
 
 interface MessageBubbleProps {
   message: Message;
@@ -73,6 +75,15 @@ export default function MessageBubble({
           <summary className="msg-reasoning-summary">推演思路</summary>
           <div className="msg-reasoning-content">{message.reasoning}</div>
         </details>
+      )}
+
+      {message.billing && (
+        <div className="msg-billing">
+          {getBillingEnabled()
+            ? `输入${formatTokens(message.billing.inputTokens)}/输出${formatTokens(message.billing.outputTokens)} tokens · ${formatCost(message.billing.cost)}`
+            : `输入${formatTokens(message.billing.inputTokens)}/输出${formatTokens(message.billing.outputTokens)} tokens`
+          }
+        </div>
       )}
 
       {isEditing ? (

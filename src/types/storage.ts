@@ -1,3 +1,15 @@
+export interface MessageBilling {
+  inputTokens: number;
+  outputTokens: number;
+  cost: number;
+}
+
+export interface SessionBilling {
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCost: number;
+}
+
 export interface Message {
   id: string;
   role: 'system' | 'user' | 'assistant';
@@ -5,6 +17,7 @@ export interface Message {
   timestamp: number;
   status?: 'draft' | 'confirmed';
   reasoning?: string;
+  billing?: MessageBilling;
 }
 
 export interface BillingPrice {
@@ -15,17 +28,19 @@ export interface BillingPrice {
 export type BillingPrices = Record<string, BillingPrice>;
 
 export interface ExportData {
-  version: 2;
+  version: 3;
   exportedAt: string;
   module: string;
   messages: Message[];
   contextHistory: string;
+  billing: SessionBilling;
 }
 
 export interface AppData {
   module: string;
   messages: Message[];
   contextHistory: string;
+  billing: SessionBilling;
 }
 
 export type ProviderType = 'openai' | 'anthropic' | 'mock';

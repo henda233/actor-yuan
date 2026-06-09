@@ -9,13 +9,14 @@ import {
   getSystemPrompt, setSystemPrompt,
   getDebugMode, setDebugMode,
   getDraftEditRewriteMode, setDraftEditRewriteMode,
+  getBillingEnabled, setBillingEnabled,
 } from '../services/configStorage';
 import type { DraftEditRewriteMode } from '../services/configStorage';
 import { createAIService } from '../services/aiService';
 import { useDataStore } from '../services/dataStore';
 
 export default function SettingsPanel() {
-  const { exportData, importData } = useDataStore();
+  const { exportData, importData, resetBilling } = useDataStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [provider, setProviderState] = useState<ProviderType>(getProvider);
@@ -30,6 +31,7 @@ export default function SettingsPanel() {
   const [testMessage, setTestMessage] = useState('');
   const [debugMode, setDebugModeState] = useState(getDebugMode);
   const [draftEditRewriteMode, setDraftEditRewriteModeState] = useState<DraftEditRewriteMode>(getDraftEditRewriteMode);
+  const [billingEnabled, setBillingEnabledState] = useState(getBillingEnabled);
 
   useEffect(() => {
     const prices = getBillingPrices();
@@ -173,7 +175,7 @@ export default function SettingsPanel() {
       <div className="setting-divider" />
 
       <div className="setting-group">
-        <label className="setting-label">计费价格（每千 token）</label>
+        <label className="setting-label">计费价格（每百万 token）</label>
         <div className="setting-billing-row">
           <input
             className="setting-input setting-billing-input"
@@ -200,6 +202,37 @@ export default function SettingsPanel() {
           </button>
         </div>
         <span className="setting-hint">当前模型：{model || '未设置'}</span>
+      </div>
+
+      <div className="setting-divider" />
+
+      <div className="setting-group">
+        <label className="setting-label">计费功能</label>
+        <label className="setting-checkbox-label">
+          <input
+            type="checkbox"
+            checked={billingEnabled}
+            onChange={(e) => {
+              setBillingEnabledState(e.target.checked);
+              setBillingEnabled(e.target.checked);
+            }}
+          />
+          <span>启用计费（关闭后仅展示 tokens 用量，隐藏费用）</span>
+        </label>
+      </div>
+
+      <div className="setting-group">
+        <button
+          type="button"
+          className="btn btn-regenerate"
+          onClick={() => {
+            if (window.confirm('确定要重置会话用量统计吗？此操作不可撤销。')) {
+              resetBilling();
+            }
+          }}
+        >
+          重置会话用量
+        </button>
       </div>
 
       <div className="setting-divider" />
